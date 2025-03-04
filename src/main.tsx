@@ -2,6 +2,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { ClerkProvider } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 
@@ -16,14 +18,29 @@ if (!PUBLISHABLE_KEY) {
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || PUBLISHABLE_KEY;
 const domain = window.location.hostname === "ebook.masqot.co" ? "ebook.masqot.co" : undefined;
 
+// We need to wrap ClerkProvider inside BrowserRouter to access routing functions
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
+    <BrowserRouter>
+      <ClerkProviderWithRoutes />
+    </BrowserRouter>
+  </React.StrictMode>
+);
+
+// Create a wrapper component to access react-router's navigate function
+function ClerkProviderWithRoutes() {
+  const navigate = useNavigate();
+  
+  return (
     <ClerkProvider 
       publishableKey={clerkPubKey}
       afterSignOutUrl="/"
       {...(domain ? { domain } : {})}
+      routing="path"
+      routerPush={(to) => navigate(to)}
+      routerReplace={(to) => navigate(to, { replace: true })}
     >
       <App />
     </ClerkProvider>
-  </React.StrictMode>
-);
+  );
+}
