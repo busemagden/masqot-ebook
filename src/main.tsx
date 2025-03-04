@@ -33,7 +33,7 @@ function ClerkProviderWithRoutes() {
     <ClerkProvider 
       publishableKey={clerkPubKey}
       afterSignOutUrl="/"
-      navigate={(to) => navigate(to)}
+      navigateFunction={(to) => navigate(to)}
       routing="path"
     >
       <App />

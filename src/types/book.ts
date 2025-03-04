@@ -14,4 +14,6 @@ export interface BookType {
   publishDate?: string;
   pageCount?: number;
   readerCount?: number;
+  chapters?: string[];
+  benefits?: string[];
 }
