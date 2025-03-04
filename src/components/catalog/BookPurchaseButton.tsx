@@ -41,6 +41,9 @@ const BookPurchaseButton = ({
 
     // Kullanıcı giriş yapmışsa satın alma işlemine devam et
     onAddToCart();
+    toast.success(`${bookTitle} sepete eklendi`, {
+      description: "Ödeme sayfasına gitmek için sepeti ziyaret edin.",
+    });
   };
 
   return (
