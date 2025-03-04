@@ -2,7 +2,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, X, ZoomIn, ZoomOut, ShoppingCart } from "lucide-react";
+import { ArrowLeft, ArrowRight, X, ZoomIn, ZoomOut, ShoppingCart, AlertTriangle } from "lucide-react";
+import { toast } from "sonner";
 
 interface BookPreviewProps {
   isOpen: boolean;
@@ -18,11 +19,26 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
   const [zoomLevel, setZoomLevel] = useState(1);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  // Add more sample images
+  // Fix image paths - add leading slash if paths don't have it
+  const fixImagePath = (path: string) => {
+    // Remove "public" from the beginning if it exists
+    if (path.startsWith("public/")) {
+      path = path.replace("public/", "/");
+    }
+    
+    // Ensure path starts with "/"
+    if (!path.startsWith("/")) {
+      path = "/" + path;
+    }
+    
+    return path;
+  };
+
+  // Fix all image paths
   const allImages = [
-    ...previewImages,
-    "public/lovable-uploads/37064668-1dc7-462a-bb37-10c1c2aff540.png",
-    "public/lovable-uploads/8810179f-6d73-44b6-9680-ed330c00b712.png"
+    ...previewImages.map(fixImagePath),
+    fixImagePath("/lovable-uploads/37064668-1dc7-462a-bb37-10c1c2aff540.png"),
+    fixImagePath("/lovable-uploads/8810179f-6d73-44b6-9680-ed330c00b712.png")
   ];
 
   // Reset state and preload images when dialog opens
@@ -38,8 +54,8 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
         return new Promise<string>((resolve, reject) => {
           const img = new Image();
           img.onload = () => resolve(src);
-          img.onerror = () => {
-            console.error(`Failed to load image: ${src}`);
+          img.onerror = (e) => {
+            console.error(`Failed to load image: ${src}`, e);
             reject(new Error(`Failed to load image: ${src}`));
           };
           img.src = src;
@@ -50,10 +66,16 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
         .then(loadedSrcs => {
           console.log("All images preloaded:", loadedSrcs);
           setLoadedImages(loadedSrcs);
+          toast.success("Önizleme yüklendi", {
+            description: "Kitap sayfalarını görüntüleyebilirsiniz."
+          });
         })
         .catch(error => {
           console.error("Error preloading images:", error);
           setLoadingError(true);
+          toast.error("Görsel yükleme hatası", {
+            description: "Önizleme görsellerini yüklerken bir sorun oluştu."
+          });
         });
     }
   }, [isOpen, previewImages]);
@@ -122,9 +144,18 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
         
         <div className="relative h-[80vh] bg-gray-100 flex items-center justify-center overflow-hidden">
           {loadingError ? (
-            <div className="text-center p-8">
-              <p className="text-red-500 mb-4">Görseller yüklenirken bir hata oluştu.</p>
-              <Button onClick={() => window.location.reload()} variant="outline">Yeniden Dene</Button>
+            <div className="text-center p-8 flex flex-col items-center gap-4">
+              <AlertTriangle className="h-12 w-12 text-amber-500" />
+              <p className="text-red-500 font-medium">Görseller yüklenirken bir hata oluştu.</p>
+              <Button 
+                onClick={() => {
+                  setLoadingError(false);
+                  window.location.reload();
+                }} 
+                variant="outline"
+              >
+                Yeniden Dene
+              </Button>
             </div>
           ) : (
             <div 
@@ -219,6 +250,9 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
               className="bg-masqot-primary hover:bg-masqot-secondary text-white"
               onClick={() => {
                 onClose();
+                toast.success("Kitabı sepetinize eklemek için yönlendiriliyorsunuz", {
+                  duration: 3000
+                });
                 // You can add a cart action here
               }}
             >
