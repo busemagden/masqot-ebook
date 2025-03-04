@@ -16,8 +16,8 @@ const Index = () => {
   // Get featured book from catalog (first book)
   const featuredBook = bookCatalog[0];
   
-  // Get 3 more books for the featured section
-  const featuredBooks = bookCatalog.slice(1, 4);
+  // Get upcoming books for the featured section
+  const upcomingBooks = bookCatalog.filter(book => book.comingSoon === true).slice(0, 3);
 
   const handleAddToCart = (bookId: number, bookTitle: string) => {
     // Here you would integrate with a real cart system
@@ -49,9 +49,9 @@ const Index = () => {
             <div className="flex flex-col sm:flex-row gap-4 mt-6">
               <Link to="/catalog">
                 <Button
-                  className="bg-masqot-primary hover:bg-masqot-secondary text-white px-6 py-6 text-lg rounded-full transition-all duration-300 w-full sm:w-auto"
+                  className="bg-masqot-primary hover:bg-masqot-secondary text-white px-5 py-2 text-sm rounded-md transition-all duration-300 w-full sm:w-auto"
                 >
-                  <BookOpen className="mr-2 h-5 w-5" />
+                  <BookOpen className="mr-2 h-4 w-4" />
                   Koleksiyonu Keşfet
                 </Button>
               </Link>
@@ -59,30 +59,30 @@ const Index = () => {
                 href="https://chat.whatsapp.com/G4tshtPS1RE64PEecc3QWc" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-6 py-6 text-lg rounded-full transition-all duration-300 w-full sm:w-auto"
+                className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-2 text-sm rounded-md transition-all duration-300 w-full sm:w-auto"
               >
-                <Users className="h-5 w-5" />
+                <Users className="h-4 w-4" />
                 Topluluğa Katıl
               </a>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
               <div className="flex items-start space-x-3">
-                <CheckCircle className="h-6 w-6 text-masqot-primary flex-shrink-0 mt-1" />
+                <CheckCircle className="h-5 w-5 text-masqot-primary flex-shrink-0 mt-1" />
                 <div>
                   <h3 className="font-medium text-masqot-dark">Güncel İçerik</h3>
                   <p className="text-sm text-masqot-secondary">Sürekli güncellenen yapay zeka ve dijital dönüşüm içerikleri</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
-                <CheckCircle className="h-6 w-6 text-masqot-primary flex-shrink-0 mt-1" />
+                <CheckCircle className="h-5 w-5 text-masqot-primary flex-shrink-0 mt-1" />
                 <div>
                   <h3 className="font-medium text-masqot-dark">Pratik Uygulamalar</h3>
                   <p className="text-sm text-masqot-secondary">İş dünyasında hemen kullanabileceğiniz pratik AI araçları</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
-                <CheckCircle className="h-6 w-6 text-masqot-primary flex-shrink-0 mt-1" />
+                <CheckCircle className="h-5 w-5 text-masqot-primary flex-shrink-0 mt-1" />
                 <div>
                   <h3 className="font-medium text-masqot-dark">Topluluk Desteği</h3>
                   <p className="text-sm text-masqot-secondary">Whatsapp topluluğumuzla sürekli destek ve güncellemeler</p>
@@ -114,7 +114,7 @@ const Index = () => {
                       {featuredBook.price}
                     </span>
                     <Button
-                      className="bg-masqot-primary hover:bg-masqot-secondary text-white transition-all duration-300"
+                      className="bg-masqot-primary hover:bg-masqot-secondary text-white text-sm rounded-md transition-all duration-300"
                       onClick={() => handleAddToCart(featuredBook.id, featuredBook.title)}
                     >
                       <ShoppingCart className="mr-2 h-4 w-4" />
@@ -128,19 +128,19 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Featured Books Section */}
+      {/* Upcoming Books Section */}
       <section className="container mx-auto px-4 py-16 bg-white/50 rounded-3xl my-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-serif font-bold text-masqot-dark mb-4">
-            Öne Çıkan E-Kitaplar
+            Yakında Çıkacak E-Kitaplar
           </h2>
           <p className="text-masqot-secondary max-w-2xl mx-auto">
-            Dijital dönüşüm yolculuğunuzda size rehberlik edecek en popüler e-kitaplarımız
+            Dijital dönüşüm yolculuğunuzda size rehberlik edecek, çok yakında yayınlanacak kitaplarımız
           </p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {featuredBooks.map((book) => (
+          {upcomingBooks.map((book) => (
             <Card
               key={book.id}
               className="book-card overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300"
@@ -158,7 +158,7 @@ const Index = () => {
                     }}
                   />
                   {book.comingSoon && (
-                    <div className="absolute top-3 right-3 bg-masqot-secondary text-white text-xs font-bold px-3 py-1 rounded-full">
+                    <div className="absolute top-3 right-3 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full">
                       Yakında
                     </div>
                   )}
@@ -172,23 +172,13 @@ const Index = () => {
                   <span className="text-lg font-bold text-masqot-primary">
                     {book.price}
                   </span>
-                  {!book.comingSoon ? (
-                    <Button
-                      className="bg-masqot-primary hover:bg-masqot-secondary text-white transition-all duration-300"
-                      onClick={() => handleAddToCart(book.id, book.title)}
-                    >
-                      <ShoppingCart className="mr-2 h-4 w-4" />
-                      Sepete Ekle
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      className="border-masqot-primary text-masqot-primary hover:bg-masqot-soft"
-                    >
-                      <Rss className="mr-2 h-4 w-4" />
-                      Haber Ver
-                    </Button>
-                  )}
+                  <Button
+                    variant="outline"
+                    className="border-masqot-primary text-masqot-primary hover:bg-masqot-soft text-sm rounded-md"
+                  >
+                    <Rss className="mr-2 h-4 w-4" />
+                    Haber Ver
+                  </Button>
                 </div>
               </div>
             </Card>
@@ -199,7 +189,7 @@ const Index = () => {
           <Link to="/catalog">
             <Button
               variant="outline"
-              className="border-masqot-primary text-masqot-primary hover:bg-masqot-soft"
+              className="border-masqot-primary text-masqot-primary hover:bg-masqot-soft text-sm"
             >
               Tüm Koleksiyonu Görüntüle
             </Button>
@@ -222,7 +212,7 @@ const Index = () => {
           <Card className="p-6 border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-masqot-soft/50">
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="bg-masqot-soft p-3 rounded-full">
-                <BookOpen className="h-8 w-8 text-masqot-primary" />
+                <BookOpen className="h-6 w-6 text-masqot-primary" />
               </div>
               <h3 className="text-xl font-serif font-bold text-masqot-dark">E-Kitaplar</h3>
               <p className="text-masqot-secondary">
@@ -231,7 +221,7 @@ const Index = () => {
               <Link to="/catalog">
                 <Button
                   variant="outline"
-                  className="border-masqot-primary text-masqot-primary hover:bg-masqot-soft mt-2"
+                  className="border-masqot-primary text-masqot-primary hover:bg-masqot-soft mt-2 text-sm"
                 >
                   Kitapları Keşfet
                 </Button>
@@ -242,7 +232,7 @@ const Index = () => {
           <Card className="p-6 border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-masqot-soft/50">
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="bg-masqot-soft p-3 rounded-full">
-                <GraduationCap className="h-8 w-8 text-masqot-primary" />
+                <GraduationCap className="h-6 w-6 text-masqot-primary" />
               </div>
               <h3 className="text-xl font-serif font-bold text-masqot-dark">Academy</h3>
               <p className="text-masqot-secondary">
@@ -251,7 +241,7 @@ const Index = () => {
               <a href="https://academy.masqot.co" target="_blank" rel="noopener noreferrer">
                 <Button
                   variant="outline"
-                  className="border-masqot-primary text-masqot-primary hover:bg-masqot-soft mt-2"
+                  className="border-masqot-primary text-masqot-primary hover:bg-masqot-soft mt-2 text-sm"
                 >
                   Academy'yi Ziyaret Et
                 </Button>
@@ -262,7 +252,7 @@ const Index = () => {
           <Card className="p-6 border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-masqot-soft/50">
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="bg-masqot-soft p-3 rounded-full">
-                <Users className="h-8 w-8 text-masqot-primary" />
+                <Users className="h-6 w-6 text-masqot-primary" />
               </div>
               <h3 className="text-xl font-serif font-bold text-masqot-dark">Topluluk</h3>
               <p className="text-masqot-secondary">
@@ -270,7 +260,7 @@ const Index = () => {
               </p>
               <a href="https://chat.whatsapp.com/G4tshtPS1RE64PEecc3QWc" target="_blank" rel="noopener noreferrer">
                 <Button
-                  className="bg-green-500 hover:bg-green-600 text-white mt-2"
+                  className="bg-green-500 hover:bg-green-600 text-white mt-2 text-sm"
                 >
                   Topluluğa Katıl
                 </Button>
@@ -292,18 +282,18 @@ const Index = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/login">
               <Button
-                className="bg-masqot-primary hover:bg-masqot-secondary text-white px-8 py-6 text-lg rounded-full transition-all duration-300 w-full sm:w-auto"
+                className="bg-masqot-primary hover:bg-masqot-secondary text-white px-6 py-2 text-sm rounded-md transition-all duration-300 w-full sm:w-auto"
               >
-                <User className="mr-2 h-5 w-5" />
+                <User className="mr-2 h-4 w-4" />
                 Hesap Oluştur
               </Button>
             </Link>
             <a href="https://chat.whatsapp.com/G4tshtPS1RE64PEecc3QWc" target="_blank" rel="noopener noreferrer">
               <Button
                 variant="outline"
-                className="border-green-500 text-green-500 hover:bg-green-50 px-8 py-6 text-lg rounded-full transition-all duration-300 w-full sm:w-auto"
+                className="border-green-500 text-green-500 hover:bg-green-50 px-6 py-2 text-sm rounded-md transition-all duration-300 w-full sm:w-auto"
               >
-                <Users className="mr-2 h-5 w-5" />
+                <Users className="mr-2 h-4 w-4" />
                 WhatsApp Grubuna Katıl
               </Button>
             </a>

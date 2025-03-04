@@ -34,7 +34,7 @@ const Header = () => {
             href="https://chat.whatsapp.com/G4tshtPS1RE64PEecc3QWc" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-full flex items-center text-sm font-medium transition-colors"
+            className="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-sm font-medium transition-colors flex items-center"
           >
             <Users className="h-3.5 w-3.5 mr-1" />
             Topluluğa Katıl
@@ -43,15 +43,15 @@ const Header = () => {
         
         <div className="flex items-center space-x-3">
           <Link to="/catalog">
-            <Button variant="ghost" className="text-masqot-dark hover:text-masqot-primary hover:bg-masqot-soft">
-              <BookOpen className="h-5 w-5" />
-              <span className="ml-2 hidden sm:inline">Katalog</span>
+            <Button variant="ghost" size="sm" className="text-masqot-dark hover:text-masqot-primary hover:bg-masqot-soft">
+              <BookOpen className="h-4 w-4" />
+              <span className="ml-1 hidden sm:inline text-sm">Katalog</span>
             </Button>
           </Link>
-          <Button variant="ghost" className="text-masqot-dark hover:text-masqot-primary hover:bg-masqot-soft relative">
-            <ShoppingCart className="h-5 w-5" />
-            <span className="ml-2 hidden sm:inline">Sepet</span>
-            <span className="absolute -top-1 -right-1 bg-masqot-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+          <Button variant="ghost" size="sm" className="text-masqot-dark hover:text-masqot-primary hover:bg-masqot-soft relative">
+            <ShoppingCart className="h-4 w-4" />
+            <span className="ml-1 hidden sm:inline text-sm">Sepet</span>
+            <span className="absolute -top-1 -right-1 bg-masqot-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
               0
             </span>
           </Button>
@@ -59,14 +59,14 @@ const Header = () => {
             href="https://chat.whatsapp.com/G4tshtPS1RE64PEecc3QWc" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="md:hidden bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded-full flex items-center text-xs font-medium transition-colors"
+            className="md:hidden bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs font-medium transition-colors flex items-center"
           >
             <Users className="h-3 w-3" />
           </a>
           <Link to="/login">
-            <Button className="bg-masqot-primary hover:bg-masqot-secondary text-white">
-              <User className="h-5 w-5" />
-              <span className="ml-2 hidden sm:inline">Giriş Yap</span>
+            <Button size="sm" className="bg-masqot-primary hover:bg-masqot-secondary text-white text-sm">
+              <User className="h-4 w-4" />
+              <span className="ml-1 hidden sm:inline">Giriş</span>
             </Button>
           </Link>
         </div>
