@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { CheckCircle, BookOpen, Users, ShoppingCart } from "lucide-react";
+import { CheckCircle, BookOpen, Users, ShoppingCart, Eye } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { BookType } from '@/types/book';
 import { useCart } from '@/contexts/CartContext';
@@ -15,12 +15,17 @@ interface HeroProps {
 
 const Hero = ({ featuredBook, onAddToCart }: HeroProps) => {
   const { addItem } = useCart();
+  const navigate = useNavigate();
 
   const handleAddToCart = () => {
     // Add book directly to cart
     addItem(featuredBook);
     // Also call the original callback for compatibility
     onAddToCart(featuredBook.id, featuredBook.title);
+  };
+
+  const handleViewBook = () => {
+    navigate(`/book/${featuredBook.id}`);
   };
 
   return (
@@ -90,9 +95,13 @@ const Hero = ({ featuredBook, onAddToCart }: HeroProps) => {
                 <img
                   src={featuredBook.cover}
                   alt={featuredBook.title}
-                  className="w-full h-80 object-cover rounded-md mb-4 shadow-lg"
+                  className="w-full h-80 object-cover rounded-md mb-4 shadow-lg cursor-pointer"
+                  onClick={handleViewBook}
                 />
-                <h3 className="text-xl font-serif font-bold text-masqot-dark mb-2">
+                <h3 
+                  className="text-xl font-serif font-bold text-masqot-dark mb-2 cursor-pointer hover:text-masqot-primary transition-colors"
+                  onClick={handleViewBook}
+                >
                   {featuredBook.title}
                 </h3>
                 <p className="text-masqot-secondary mb-3">{featuredBook.author}</p>
@@ -101,13 +110,23 @@ const Hero = ({ featuredBook, onAddToCart }: HeroProps) => {
                   <span className="text-lg font-bold text-masqot-primary">
                     {featuredBook.price}
                   </span>
-                  <Button
-                    className="bg-masqot-primary hover:bg-masqot-secondary text-white text-sm rounded-md transition-all duration-300"
-                    onClick={handleAddToCart}
-                  >
-                    <ShoppingCart className="mr-2 h-4 w-4" />
-                    Sepete Ekle
-                  </Button>
+                  <div className="flex space-x-2">
+                    <Button
+                      variant="outline"
+                      className="border-masqot-primary text-masqot-primary hover:bg-masqot-primary/10"
+                      onClick={handleViewBook}
+                    >
+                      <Eye className="mr-2 h-4 w-4" />
+                      İncele
+                    </Button>
+                    <Button
+                      className="bg-masqot-primary hover:bg-masqot-secondary text-white text-sm rounded-md transition-all duration-300"
+                      onClick={handleAddToCart}
+                    >
+                      <ShoppingCart className="mr-2 h-4 w-4" />
+                      Sepete Ekle
+                    </Button>
+                  </div>
                 </div>
               </div>
             </Card>

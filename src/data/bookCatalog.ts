@@ -13,14 +13,35 @@ export const bookCatalog: BookType[] = [
     description: "20 Etkili AI Aracıyla İşinizi Adım Adım İleriye Taşıyın. İş dünyasında yapay zeka araçlarını kullanarak verimliliği artırmanın yollarını öğreten kapsamlı bir rehber.",
     rating: 4.9,
     reviewCount: 124,
+    pageCount: 90,
+    publishDate: "2023-10-15",
     previewImages: [
-      "/lovable-uploads/3fb5c295-fdb4-4b4b-9295-b5dfb74feea9.png",
-      "/lovable-uploads/0468a758-510a-4b03-8391-c0dda6f7c8e9.png",
-      "/lovable-uploads/b961a2e3-a6b6-467c-b8db-cd837d753cd6.png",
-      "/lovable-uploads/fea74a2b-4ab4-4aeb-8974-b8c5e20a4be3.png",
-      "/lovable-uploads/a7a76f1b-0947-4293-a780-678d02069f58.png",
-      "/lovable-uploads/cd342699-d1ca-4ec3-b507-59811297a8df.png",
-      "/lovable-uploads/85af39d4-69cd-4b45-9b36-508147e69428.png"
+      "/lovable-uploads/9216013d-7e89-4203-8a45-819736d9d970.png",
+      "/lovable-uploads/79ab1853-7d01-4851-9e18-27227f5343e5.png",
+      "/lovable-uploads/c3e4475d-dbd8-48d9-858e-d7ad8969ef3b.png",
+      "/lovable-uploads/e0320fbf-f416-4983-9492-fbd3c6cadd3a.png",
+      "/lovable-uploads/b9e70139-ef42-4236-8acb-75fc19452d05.png",
+      "/lovable-uploads/fe426291-13df-436e-905e-f1fe706192ef.png",
+      "/lovable-uploads/71f346f8-bf05-433e-8394-d43848a0fff7.png",
+      "/lovable-uploads/c01f9356-f847-48ab-b1f9-62fe0bf81fb0.png",
+      "/lovable-uploads/217af3c8-5570-4abd-b754-d92f7e34ef0d.png"
+    ],
+    chapters: [
+      "Yapay Zeka Tanıma ve Doğru Kullanma Rehberi",
+      "Zaman ve Kaynak Yönetimi",
+      "İşinizi Büyütecek Stratejiler",
+      "Adım Adım Uygulama Planı",
+      "Rekabet Avantajı",
+      "Başarı Hikayeleri ve İlham",
+      "İş Dünyasında Geleceğe Hazırlık"
+    ],
+    benefits: [
+      "Yapay zeka ile iş süreçlerinizi otomatikleştirin",
+      "Müşteri deneyimini yapay zeka ile kişiselleştirin",
+      "Maliyetlerinizi optimize edin ve tasarruf sağlayın",
+      "Yaratıcılık ve inovasyon kapasitesini artırın",
+      "Rekabet avantajı için stratejik yapay zeka kullanımı",
+      "Veri odaklı karar verme mekanizmalarını geliştirin"
     ]
   },
   {

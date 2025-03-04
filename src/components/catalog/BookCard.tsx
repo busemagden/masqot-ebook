@@ -1,3 +1,4 @@
+
 import { BookType } from "@/types/book";
 import BookCover from "./BookCover";
 import BookBadges from "./BookBadges";
@@ -5,6 +6,7 @@ import BookRating from "./BookRating";
 import BookPurchaseButton from "./BookPurchaseButton";
 import { motion } from "framer-motion";
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface BookCardProps {
   book: BookType;
@@ -17,11 +19,18 @@ interface BookCardProps {
 const BookCard = ({ book, onOpenPreview = () => {}, onAddToCart, ratingComponent, view = 'grid' }: BookCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const isComingSoon = book.comingSoon || false;
+  const navigate = useNavigate();
   
   // Truncate description to 100 characters
   const truncatedDescription = book.description.length > 100 
     ? `${book.description.substring(0, 100)}...` 
     : book.description;
+
+  const handleBookClick = () => {
+    if (!isComingSoon) {
+      navigate(`/book/${book.id}`);
+    }
+  };
 
   return (
     <motion.div 
@@ -40,15 +49,16 @@ const BookCard = ({ book, onOpenPreview = () => {}, onAddToCart, ratingComponent
           }}
           transition={{ duration: 0.3 }}
           className="mb-4"
-          onClick={() => onOpenPreview(book.id)}
+          onClick={handleBookClick}
+          style={{ cursor: isComingSoon ? 'default' : 'pointer' }}
         >
           <BookCover
             cover={book.cover}
             title={book.title}
-            isPreviewable={true}
+            isPreviewable={!isComingSoon}
             isComingSoon={isComingSoon}
-            hasPreview={book.previewImages && book.previewImages.length > 0}
-            onPreviewClick={() => onOpenPreview(book.id)}
+            hasPreview={!isComingSoon && book.previewImages && book.previewImages.length > 0}
+            onPreviewClick={handleBookClick}
             view={view}
           />
         </motion.div>
@@ -60,7 +70,11 @@ const BookCard = ({ book, onOpenPreview = () => {}, onAddToCart, ratingComponent
         />
       </div>
       
-      <div className="mb-2 flex-grow">
+      <div 
+        className="mb-2 flex-grow"
+        onClick={handleBookClick}
+        style={{ cursor: isComingSoon ? 'default' : 'pointer' }}
+      >
         <h3 className="font-bold text-lg text-gray-800 line-clamp-2 mb-1" title={book.title}>
           {book.title}
         </h3>

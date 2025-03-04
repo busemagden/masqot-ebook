@@ -12,6 +12,7 @@ import Payment from "./pages/Payment";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailed from "./pages/PaymentFailed";
 import Contact from "./pages/Contact";
+import BookDetail from "./pages/BookDetail";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/catalog" element={<Catalog />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/book/:bookId" element={<BookDetail />} />
           
           {/* Payment pages - no longer requiring authentication */}
           <Route path="/payment" element={<Payment />} />

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { motion } from "framer-motion";
 import BookBadges, { isBestseller, hasPreview, isComingSoon } from "./BookBadges";
+import { useNavigate } from 'react-router-dom';
 
 interface BookListViewProps {
   books: BookType[];
@@ -14,6 +15,8 @@ interface BookListViewProps {
 }
 
 const BookListView = ({ books, onOpenPreview, onAddToCart }: BookListViewProps) => {
+  const navigate = useNavigate();
+
   if (books.length === 0) {
     return (
       <div className="text-center py-20">
@@ -21,6 +24,10 @@ const BookListView = ({ books, onOpenPreview, onAddToCart }: BookListViewProps) 
       </div>
     );
   }
+
+  const handleBookClick = (bookId: number) => {
+    navigate(`/book/${bookId}`);
+  };
 
   return (
     <div className="space-y-6">
@@ -34,7 +41,7 @@ const BookListView = ({ books, onOpenPreview, onAddToCart }: BookListViewProps) 
         >
           <div 
             className="relative w-full md:w-40 h-56 md:h-48 flex-shrink-0 cursor-pointer"
-            onClick={() => onOpenPreview(book.id)}
+            onClick={() => !book.comingSoon && handleBookClick(book.id)}
           >
             <img 
               src={book.cover} 
@@ -62,7 +69,12 @@ const BookListView = ({ books, onOpenPreview, onAddToCart }: BookListViewProps) 
           
           <div className="flex-grow flex flex-col">
             <div className="mb-2">
-              <h3 className="font-bold text-xl text-gray-800 mb-1">{book.title}</h3>
+              <h3 
+                className={`font-bold text-xl text-gray-800 mb-1 ${!book.comingSoon ? 'cursor-pointer hover:text-masqot-primary' : ''}`}
+                onClick={() => !book.comingSoon && handleBookClick(book.id)}
+              >
+                {book.title}
+              </h3>
               <p className="text-gray-600 text-sm">{book.author}</p>
               
               {book.rating && (
@@ -82,10 +94,11 @@ const BookListView = ({ books, onOpenPreview, onAddToCart }: BookListViewProps) 
               <Button 
                 variant="outline" 
                 className="flex items-center gap-2"
-                onClick={() => onOpenPreview(book.id)}
+                onClick={() => !book.comingSoon && handleBookClick(book.id)}
+                disabled={book.comingSoon}
               >
                 <Eye size={16} />
-                Önizle
+                İncele
               </Button>
               
               <BookPurchaseButton 
