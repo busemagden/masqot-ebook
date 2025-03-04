@@ -21,7 +21,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <ClerkProvider 
       publishableKey={clerkPubKey}
       afterSignOutUrl="/"
-      {...(domain ? { hostname: domain } : {})}
+      {...(domain ? { domain } : {})}
     >
       <App />
     </ClerkProvider>
