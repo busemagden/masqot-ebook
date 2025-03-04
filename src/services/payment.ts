@@ -1,68 +1,113 @@
 
-// Stripe payment utilities
-import { loadStripe } from '@stripe/stripe-js';
+// Payment service utilities for e-commerce
+import { BookType } from '@/types/book';
+import { createPaytrPaymentLink, paytrConfig } from './paytr';
+import { toast } from 'sonner';
 
-// Initialize Stripe with your publishable key
-// In a production app, you'd use an env variable
-const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+// Sepet öğelerini PayTR formatına dönüştür
+const formatCartItemsForPaytr = (items: Array<{id: number, title: string, price: string}>) => {
+  return items.map(item => ({
+    name: item.title,
+    category: 'Kitap',
+    price: Math.round(parseFloat(item.price.replace(/[^\d.-]/g, '')) * 100), // TL -> Kuruş
+  }));
+};
 
+// Unique sipariş ID'si oluştur
+const generateOrderId = () => {
+  return `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+};
+
+// Ödeme işlemini başlat
 export const initiateCheckout = async (items: Array<{id: number, title: string, price: string}>) => {
   try {
-    // Convert the price from string (e.g. "₺59.99") to number in cents
-    // Assuming the currency symbol is at the beginning
-    const lineItems = items.map(item => ({
-      id: item.id,
-      name: item.title,
-      // Remove currency symbol and convert to cents (for Stripe)
-      amount: Math.round(parseFloat(item.price.replace(/[^\d.-]/g, '')) * 100),
-      currency: 'TRY', // Turkish Lira
-      quantity: 1
-    }));
+    // Toplam tutarı hesapla (kuruş cinsinden)
+    const totalAmount = items.reduce((total, item) => {
+      return total + Math.round(parseFloat(item.price.replace(/[^\d.-]/g, '')) * 100);
+    }, 0);
     
-    // In a real implementation, this would be a call to your backend API
-    // which would create a Stripe Checkout Session and return the sessionId
-    console.log('Creating checkout session for:', lineItems);
+    // Kullanıcı email bilgisi (gerçek uygulamada kullanıcıdan veya Clerk'tan alınmalı)
+    const userEmail = "customer@example.com";
     
-    // Simulate a backend response for now
-    const mockSessionId = 'mock_session_' + Math.random().toString(36).substring(2, 15);
+    // Sepeti hazırla
+    const basketItems = formatCartItemsForPaytr(items);
     
-    // Log the items that would be sent to Stripe
-    console.log('Items for checkout:', lineItems);
+    // Sipariş ID'si oluştur
+    const orderId = generateOrderId();
     
-    // Redirect to checkout page
-    return {
-      success: true,
-      sessionId: mockSessionId,
-      message: 'Checkout session created successfully'
-    };
+    // Demo amacıyla consola yazdırma
+    console.log('Ödeme başlatılıyor:', {
+      totalAmount,
+      basketItems,
+      orderId
+    });
+    
+    // PayTR API'si boş olduğunda uyarı
+    if (!paytrConfig.merchantId || !paytrConfig.merchantKey || !paytrConfig.merchantSalt) {
+      console.warn('PayTR konfigürasyonu eksik. Demo modu aktif.');
+      
+      // Demo sonucu dön
+      return {
+        success: true,
+        message: 'Demo modu: Ödeme bağlantısı oluşturuldu (gerçek değil)'
+      };
+    }
+    
+    // PayTR ile ödeme bağlantısı oluştur
+    const paytrResponse = await createPaytrPaymentLink({
+      orderId,
+      totalAmount,
+      basketItems,
+      userEmail
+    });
+    
+    // Yanıt başarılı ise
+    if (paytrResponse.status === 'success' && paytrResponse.paymentUrl) {
+      // Yeni pencerede ödeme sayfasını aç
+      window.open(paytrResponse.paymentUrl, '_blank');
+      
+      return {
+        success: true,
+        message: 'Ödeme sayfası açıldı'
+      };
+    } else {
+      // Hata oluştuğunda
+      return {
+        success: false,
+        message: paytrResponse.reason || 'Ödeme başlatılamadı'
+      };
+    }
   } catch (error) {
-    console.error('Error initiating checkout:', error);
+    console.error('Ödeme başlatma hatası:', error);
     return {
       success: false,
-      message: 'Failed to create checkout session'
+      message: 'Bir hata oluştu, lütfen daha sonra tekrar deneyin'
     };
   }
 };
 
-// This function would be used to redirect to Stripe Checkout
-// In a real implementation
-export const redirectToCheckout = async (sessionId: string) => {
-  try {
-    const stripe = await stripePromise;
-    if (!stripe) {
-      throw new Error('Stripe failed to initialize');
-    }
-    
-    // In a real implementation, you would redirect to the Stripe checkout
-    // const { error } = await stripe.redirectToCheckout({ sessionId });
-    
-    // For now, simulate the redirect
-    console.log(`Would redirect to Stripe checkout with session ID: ${sessionId}`);
-    
-    // For demo purposes
-    return { success: true };
-  } catch (error) {
-    console.error('Error redirecting to checkout:', error);
-    return { success: false, error };
-  }
+// Başarılı ödeme sonrası işlemler
+export const processSuccessfulPayment = (orderId: string) => {
+  // Burada sipariş tamamlandığında yapılacak işlemler yer alabilir
+  toast.success("Ödeme başarıyla tamamlandı", {
+    description: `Sipariş numaranız: ${orderId}`
+  });
+  
+  return {
+    success: true,
+    orderId
+  };
+};
+
+// Başarısız ödeme sonrası işlemler
+export const processFailedPayment = (orderId: string, reason: string) => {
+  toast.error("Ödeme işlemi başarısız", {
+    description: reason || "Ödeme sırasında bir hata oluştu"
+  });
+  
+  return {
+    success: false,
+    orderId,
+    reason
+  };
 };

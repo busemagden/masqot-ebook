@@ -12,6 +12,8 @@ import NotFound from "./pages/NotFound";
 import Catalog from "./pages/Catalog";
 import Payment from "./pages/Payment";
 import Profile from "./pages/Profile";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentFailed from "./pages/PaymentFailed";
 
 const queryClient = new QueryClient();
 
@@ -45,7 +47,7 @@ const App = () => (
           
           <Route path="/catalog" element={<Catalog />} />
           
-          {/* Payment page - only for signed in users */}
+          {/* Payment pages */}
           <Route 
             path="/payment" 
             element={
@@ -59,6 +61,9 @@ const App = () => (
               </>
             } 
           />
+          
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-failed" element={<PaymentFailed />} />
           
           {/* Redirect /my-books to /profile */}
           <Route 

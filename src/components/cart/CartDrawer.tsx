@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
@@ -44,30 +43,24 @@ const CartDrawer = () => {
       return;
     }
     
-    toast.loading("Ödeme sayfasına yönlendiriliyor...");
+    toast.loading("Ödeme başlatılıyor...", { id: "payment-loading" });
     
     try {
-      // In a real app, this would redirect to a Stripe checkout page
       const result = await initiateCheckout(items);
       
+      toast.dismiss("payment-loading");
+      
       if (result.success) {
-        toast.dismiss();
         toast.success("Ödeme işlemi başlatıldı", {
-          description: "Ödeme sayfasına yönlendiriliyorsunuz."
+          description: result.message || "Ödeme sayfasına yönlendiriliyorsunuz."
         });
-        
-        // Redirect to a payment page (mock for now)
-        setTimeout(() => {
-          navigate("/payment");
-        }, 1500);
       } else {
-        toast.dismiss();
         toast.error("Ödeme işlemi başlatılamadı", {
-          description: result.message
+          description: result.message || "Bir hata oluştu."
         });
       }
     } catch (error) {
-      toast.dismiss();
+      toast.dismiss("payment-loading");
       toast.error("Bir hata oluştu", {
         description: "Lütfen daha sonra tekrar deneyiniz."
       });
