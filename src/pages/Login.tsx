@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,22 +9,56 @@ import { BookOpen, Mail, Lock, User, ArrowRight } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import { useUser, useClerk, SignIn } from "@clerk/clerk-react";
+import { toast } from "sonner";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { isSignedIn, user } = useUser();
+  const { signOut } = useClerk();
+  const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  // Redirect if already logged in
+  if (isSignedIn) {
+    navigate("/my-books");
+    return null;
+  }
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login attempt with:", { email, password });
-    // Burada login işlemi yapılacak
+    setIsLoading(true);
+    
+    try {
+      // This functionality will be handled by Clerk
+      toast.info("Giriş sayfasına yönlendiriliyorsunuz", {
+        duration: 2000,
+      });
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Giriş yapılırken bir hata oluştu");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Register attempt with:", { name, email, password });
-    // Burada kayıt işlemi yapılacak
+    setIsLoading(true);
+    
+    try {
+      // This functionality will be handled by Clerk
+      toast.info("Kayıt sayfasına yönlendiriliyorsunuz", {
+        duration: 2000,
+      });
+    } catch (error) {
+      console.error("Register error:", error);
+      toast.error("Kayıt olurken bir hata oluştu");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -48,46 +82,7 @@ const Login = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <form onSubmit={handleLogin} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">E-posta</Label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-3 h-4 w-4 text-masqot-primary" />
-                        <Input
-                          id="email"
-                          type="email"
-                          placeholder="ornek@mail.com"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="pl-10"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="password">Şifre</Label>
-                        <Link to="/sifremi-unuttum" className="text-xs text-masqot-primary hover:underline">
-                          Şifremi Unuttum
-                        </Link>
-                      </div>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-3 h-4 w-4 text-masqot-primary" />
-                        <Input
-                          id="password"
-                          type="password"
-                          placeholder="••••••••"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          className="pl-10"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <Button type="submit" className="w-full bg-masqot-primary hover:bg-masqot-secondary">
-                      Giriş Yap
-                    </Button>
-                  </form>
+                  <SignIn />
                 </CardContent>
               </Card>
             </TabsContent>
@@ -101,55 +96,7 @@ const Login = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <form onSubmit={handleRegister} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Ad Soyad</Label>
-                      <div className="relative">
-                        <User className="absolute left-3 top-3 h-4 w-4 text-masqot-primary" />
-                        <Input
-                          id="name"
-                          placeholder="Ad Soyad"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          className="pl-10"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="register-email">E-posta</Label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-3 h-4 w-4 text-masqot-primary" />
-                        <Input
-                          id="register-email"
-                          type="email"
-                          placeholder="ornek@mail.com"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="pl-10"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="register-password">Şifre</Label>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-3 h-4 w-4 text-masqot-primary" />
-                        <Input
-                          id="register-password"
-                          type="password"
-                          placeholder="••••••••"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          className="pl-10"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <Button type="submit" className="w-full bg-masqot-primary hover:bg-masqot-secondary">
-                      Kayıt Ol
-                    </Button>
-                  </form>
+                  <SignIn />
                 </CardContent>
                 <CardFooter className="flex justify-center">
                   <p className="text-sm text-center text-muted-foreground">
