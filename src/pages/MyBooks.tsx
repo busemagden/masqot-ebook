@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useUser } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
@@ -9,36 +9,48 @@ import { BookOpenCheck, Lock } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { bookCatalog } from "@/data/bookCatalog";
 import { BookType } from "@/types/book";
-import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
 
 const MyBooks = () => {
-  const { isSignedIn, user } = useUser();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [purchasedBooks, setPurchasedBooks] = useState<BookType[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // For now, we'll simulate fetching purchased books
-    // Later, this will come from a database
-    if (isSignedIn) {
-      // Simulate API call with a delay
-      setTimeout(() => {
-        // For demo purposes, let's say the user has purchased books with IDs 1, 3, and 5
-        const userPurchasedBookIds = [1, 3, 5];
-        const userBooks = bookCatalog.filter(book => userPurchasedBookIds.includes(book.id));
-        setPurchasedBooks(userBooks);
-        setLoading(false);
-      }, 1000);
+    // Local storage'dan giriş durumunu kontrol et
+    const loggedInStatus = localStorage.getItem('isLoggedIn') === 'true';
+    setIsLoggedIn(loggedInStatus);
+
+    // Eğer giriş yapılmadıysa, login sayfasına yönlendir
+    if (!loggedInStatus) {
+      toast.error("Bu sayfayı görüntülemek için giriş yapmalısınız");
+      navigate("/login");
+      return;
     }
-  }, [isSignedIn, user?.id]);
+
+    // Giriş yapıldıysa, kullanıcının kitaplarını getir
+    // Simüle edilmiş veri çekme işlemi
+    setTimeout(() => {
+      // Demo amaçlı, belirli kitapları kullanıcının satın aldığı kitaplar olarak göster
+      const userPurchasedBookIds = [1, 3, 5];
+      const userBooks = bookCatalog.filter(book => userPurchasedBookIds.includes(book.id));
+      setPurchasedBooks(userBooks);
+      setLoading(false);
+    }, 1000);
+  }, [navigate]);
 
   const openBookReader = (book: BookType) => {
     toast.success(`${book.title} kitabını açıyorsunuz`, {
       description: "Kitap okuma sayfasına yönlendiriliyorsunuz."
     });
-    // TODO: Implement book reader page later
+    // TODO: Kitap okuyucu sayfası daha sonra eklenecek
     // navigate(`/reader/${book.id}`);
   };
+
+  if (!isLoggedIn) {
+    return null; // Navigate yapılacağı için burada bir şey render etmeye gerek yok
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-masqot-soft">
@@ -115,7 +127,7 @@ const MyBooks = () => {
             <p className="text-gray-500 mb-6">Satın aldığınız kitaplar burada görünecek.</p>
             <Button 
               className="bg-masqot-primary hover:bg-masqot-secondary"
-              onClick={() => location.href = '/catalog'}
+              onClick={() => navigate('/catalog')}
             >
               Kataloga Git
             </Button>

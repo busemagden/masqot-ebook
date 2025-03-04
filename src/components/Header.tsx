@@ -1,9 +1,36 @@
 
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, User, ShoppingCart, Users, GraduationCap } from "lucide-react";
+import { BookOpen, User, ShoppingCart, Users, GraduationCap, LogOut } from "lucide-react";
+import { toast } from "sonner";
 
 const Header = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Sayfa yüklendiğinde local storage'dan giriş durumunu kontrol et
+    const loggedInStatus = localStorage.getItem('isLoggedIn') === 'true';
+    const email = localStorage.getItem('userEmail') || "";
+    
+    setIsLoggedIn(loggedInStatus);
+    setUserEmail(email);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userName');
+    
+    setIsLoggedIn(false);
+    setUserEmail("");
+    
+    toast.success("Başarıyla çıkış yaptınız");
+    navigate("/");
+  };
+
   return (
     <header className="w-full bg-white/70 backdrop-blur-md border-b border-masqot-soft sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
@@ -63,12 +90,33 @@ const Header = () => {
           >
             <Users className="h-3 w-3" />
           </a>
-          <Link to="/login">
-            <Button size="sm" className="bg-masqot-primary hover:bg-masqot-secondary text-white text-sm">
-              <User className="h-4 w-4" />
-              <span className="ml-1 hidden sm:inline">Giriş</span>
-            </Button>
-          </Link>
+          
+          {isLoggedIn ? (
+            <div className="flex items-center space-x-2">
+              <Link to="/my-books">
+                <Button variant="ghost" size="sm" className="text-masqot-dark hover:text-masqot-primary hover:bg-masqot-soft">
+                  <User className="h-4 w-4 mr-1" />
+                  <span className="max-w-28 truncate text-sm hidden sm:inline">{userEmail}</span>
+                </Button>
+              </Link>
+              <Button 
+                size="sm" 
+                variant="outline"
+                className="text-red-500 border-red-500 hover:bg-red-50"
+                onClick={handleLogout}
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="ml-1 hidden sm:inline text-sm">Çıkış</span>
+              </Button>
+            </div>
+          ) : (
+            <Link to="/login">
+              <Button size="sm" className="bg-masqot-primary hover:bg-masqot-secondary text-white text-sm">
+                <User className="h-4 w-4" />
+                <span className="ml-1 hidden sm:inline">Giriş</span>
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>
