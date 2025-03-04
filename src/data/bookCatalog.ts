@@ -14,11 +14,13 @@ export const bookCatalog: BookType[] = [
     rating: 4.9,
     reviewCount: 124,
     previewImages: [
-      "/lovable-uploads/b56f5f9f-70c4-466c-b85a-7717c3aa30fc.png",
-      "/lovable-uploads/87243fdd-8dbf-4411-afac-39b60e1b39fe.png",
-      "/lovable-uploads/dfba1129-8ac9-4a50-85c7-30436671a3fd.png",
-      "/lovable-uploads/fa26c9b6-4187-4988-a9dd-83fe5fb084df.png",
-      "/lovable-uploads/7279815a-e3fd-4e77-8921-976a199b6ff8.png"
+      "/lovable-uploads/3fb5c295-fdb4-4b4b-9295-b5dfb74feea9.png",
+      "/lovable-uploads/0468a758-510a-4b03-8391-c0dda6f7c8e9.png",
+      "/lovable-uploads/b961a2e3-a6b6-467c-b8db-cd837d753cd6.png",
+      "/lovable-uploads/fea74a2b-4ab4-4aeb-8974-b8c5e20a4be3.png",
+      "/lovable-uploads/a7a76f1b-0947-4293-a780-678d02069f58.png",
+      "/lovable-uploads/cd342699-d1ca-4ec3-b507-59811297a8df.png",
+      "/lovable-uploads/85af39d4-69cd-4b45-9b36-508147e69428.png"
     ]
   },
   {
