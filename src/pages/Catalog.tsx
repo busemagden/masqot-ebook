@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -84,6 +83,24 @@ const bookCatalog = [
     price: "₺279",
     category: "AI Ethics",
     description: "Yapay zeka uygulamalarında etik kuralları, sorumlulukları ve karşılaşılan zorlukları ele alan kapsamlı bir inceleme."
+  },
+  {
+    id: 9,
+    title: "Dijital Çağda Başarının Formülü",
+    author: "MASQOT Team",
+    cover: "/lovable-uploads/02b6a973-aac4-40b1-b116-de88d72b509b.png",
+    price: "₺499",
+    category: "AI Tools",
+    description: "20 Etkili AI Aracıyla İşinizi Adım Adım İleriye Taşıyın. İş dünyasında yapay zeka araçlarını kullanarak verimliliği artırmanın yollarını öğreten kapsamlı bir rehber."
+  },
+  {
+    id: 10,
+    title: "Yapay Zeka İle İş Dünyasında Fark Yaratın",
+    author: "MASQOT Team",
+    cover: "/lovable-uploads/fc9fea45-0ec6-4eed-9ee9-f4371f2c3d70.png",
+    price: "₺469",
+    category: "Business AI",
+    description: "Modern iş dünyasında rekabet avantajı sağlamak için yapay zeka teknolojilerini nasıl kullanacağınızı anlatan stratejik bir kılavuz."
   }
 ];
 
@@ -97,7 +114,9 @@ const categories = [
   "Big Data",
   "Neural Networks",
   "Statistics",
-  "AI Ethics"
+  "AI Ethics",
+  "AI Tools",
+  "Business AI"
 ];
 
 const Catalog = () => {
@@ -108,10 +127,8 @@ const Catalog = () => {
   const { toast } = useToast();
 
   const handleAddToCart = (bookId: number, bookTitle: string) => {
-    // Here you would integrate with a real cart system
     console.log(`Added book ${bookId} to cart`);
     
-    // Show toast notification
     toast({
       title: "Sepete Eklendi!",
       description: `${bookTitle} sepetinize eklendi.`,
@@ -119,7 +136,6 @@ const Catalog = () => {
     });
   };
 
-  // Filter books based on search query and category
   const filteredBooks = bookCatalog.filter(book => {
     const matchesSearch = book.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                         book.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -144,7 +160,6 @@ const Catalog = () => {
           </p>
         </div>
 
-        {/* Search and Filter Section */}
         <div className="bg-white/50 rounded-xl p-6 mb-8 shadow-sm backdrop-blur-sm">
           <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-end">
             <div className="flex-1 space-y-2">
@@ -194,14 +209,12 @@ const Catalog = () => {
           </div>
         </div>
 
-        {/* Results Count */}
         <div className="mb-6">
           <p className="text-masqot-secondary">
             {filteredBooks.length} sonuç bulundu
           </p>
         </div>
 
-        {/* Books Grid/List View */}
         {viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {filteredBooks.map((book) => (
