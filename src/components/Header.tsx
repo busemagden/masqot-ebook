@@ -1,13 +1,15 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { useAuth } from '@clerk/clerk-react';
 import CartDrawer from "@/components/cart/CartDrawer";
-import { User, Mail, Home, ExternalLink } from 'lucide-react';
+import { User, Mail, Home, ExternalLink, Menu, X } from 'lucide-react';
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const Header = () => {
   const { isSignedIn } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="flex items-center justify-between p-4 bg-white shadow">
@@ -16,7 +18,7 @@ const Header = () => {
           <img 
             src="/lovable-uploads/69c0a793-1c2e-48d6-a8c1-e56524249ceb.png" 
             alt="Masqot Logo" 
-            className="h-12 w-auto" // Increased size from h-10 to h-12
+            className="h-12 w-auto"
           />
           <div className="flex flex-col">
             <span className="text-sm font-medium text-gray-500">E-kitap</span>
@@ -24,7 +26,9 @@ const Header = () => {
           </div>
         </Link>
       </div>
-      <div className="flex items-center space-x-3">
+
+      {/* Desktop Navigation */}
+      <div className="hidden md:flex items-center space-x-3">
         <Link to="/">
           <Button variant="ghost" className="flex items-center gap-1">
             <Home className="h-4 w-4" />
@@ -59,6 +63,65 @@ const Header = () => {
             <Button variant="outline">Giriş Yap</Button>
           </Link>
         )}
+      </div>
+
+      {/* Mobile menu button */}
+      <div className="flex items-center md:hidden gap-2">
+        <CartDrawer />
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon" className="h-10 w-10">
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Menüyü Aç</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[80%] sm:w-[350px] bg-white">
+            <div className="flex flex-col gap-4 mt-8">
+              <Link to="/" className="w-full" onClick={() => setIsOpen(false)}>
+                <Button variant="ghost" className="w-full justify-start gap-2">
+                  <Home className="h-4 w-4" />
+                  Anasayfa
+                </Button>
+              </Link>
+              <a 
+                href="https://masqot.co" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-full"
+              >
+                <Button variant="ghost" className="w-full justify-start gap-2">
+                  <ExternalLink className="h-4 w-4" />
+                  Blog
+                </Button>
+              </a>
+              <Link to="/catalog" className="w-full" onClick={() => setIsOpen(false)}>
+                <Button variant="ghost" className="w-full justify-start">
+                  Katalog
+                </Button>
+              </Link>
+              <Link to="/contact" className="w-full" onClick={() => setIsOpen(false)}>
+                <Button variant="ghost" className="w-full justify-start gap-2">
+                  <Mail className="h-4 w-4" />
+                  Bizimle İletişime Geçin
+                </Button>
+              </Link>
+              {isSignedIn ? (
+                <Link to="/profile" className="w-full" onClick={() => setIsOpen(false)}>
+                  <Button variant="outline" className="w-full justify-start gap-2">
+                    <User className="h-4 w-4" />
+                    Profil
+                  </Button>
+                </Link>
+              ) : (
+                <Link to="/login" className="w-full" onClick={() => setIsOpen(false)}>
+                  <Button variant="outline" className="w-full justify-start">
+                    Giriş Yap
+                  </Button>
+                </Link>
+              )}
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   );
