@@ -2,26 +2,28 @@
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { book, bookOpen, user } from "lucide-react";
+import { Book, BookOpen, User } from "lucide-react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const featuredBooks = [
   {
     id: 1,
-    title: "AI and Machine Learning Basics",
+    title: "AI ve Makine Öğrenimi Temelleri",
     author: "MASQOT Team",
     cover: "/placeholder.svg",
     price: "₺299",
   },
   {
     id: 2,
-    title: "Deep Learning with Python",
+    title: "Python ile Derin Öğrenme",
     author: "MASQOT Team",
     cover: "/placeholder.svg",
     price: "₺399",
   },
   {
     id: 3,
-    title: "Natural Language Processing",
+    title: "Doğal Dil İşleme",
     author: "MASQOT Team",
     cover: "/placeholder.svg",
     price: "₺349",
@@ -32,7 +34,9 @@ const Index = () => {
   const [isHovered, setIsHovered] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-masqot-soft">
+    <div className="min-h-screen bg-gradient-to-b from-white to-masqot-soft flex flex-col">
+      <Header />
+
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="flex flex-col items-center text-center space-y-6 animate-fade-in">
@@ -45,7 +49,7 @@ const Index = () => {
           <Button
             className="mt-8 bg-masqot-primary hover:bg-masqot-secondary text-white px-8 py-6 text-lg rounded-full transition-all duration-300"
           >
-            <bookOpen className="mr-2 h-5 w-5" />
+            <BookOpen className="mr-2 h-5 w-5" />
             Koleksiyonu Keşfet
           </Button>
         </div>
@@ -84,7 +88,7 @@ const Index = () => {
                   <Button
                     className="bg-masqot-primary hover:bg-masqot-secondary text-white transition-all duration-300"
                   >
-                    <book className="mr-2 h-4 w-4" />
+                    <Book className="mr-2 h-4 w-4" />
                     Satın Al
                   </Button>
                 </div>
@@ -106,11 +110,13 @@ const Index = () => {
           <Button
             className="bg-masqot-primary hover:bg-masqot-secondary text-white px-8 py-6 text-lg rounded-full transition-all duration-300"
           >
-            <user className="mr-2 h-5 w-5" />
+            <User className="mr-2 h-5 w-5" />
             Hesap Oluştur
           </Button>
         </div>
       </section>
+      
+      <Footer />
     </div>
   );
 };
