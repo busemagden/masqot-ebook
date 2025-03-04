@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Star, StarHalf, Eye } from "lucide-react";
 import { BookType } from '@/types/book';
 
 interface BookCardProps {
@@ -17,31 +17,48 @@ const BookCard = ({ book, onAddToCart, view }: BookCardProps) => {
   if (view === 'grid') {
     return (
       <Card
-        key={book.id}
-        className="book-card glass-card transition-all duration-300 hover:shadow-xl"
+        className="book-card glass-card transition-all duration-300 hover:shadow-xl overflow-hidden"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="p-6">
+        <div className="relative">
           <img
             src={book.cover}
             alt={book.title}
-            className="w-full h-64 object-cover rounded-md mb-4 transition-transform duration-300"
+            className="w-full h-64 object-cover transition-transform duration-300"
             style={{
               transform: isHovered ? 'scale(1.05)' : 'scale(1)',
             }}
           />
-          <div className="mb-2">
-            <span className="text-xs font-medium px-2 py-1 rounded-full bg-masqot-soft text-masqot-primary">
-              {book.category}
-            </span>
+          {isHovered && (
+            <div className="absolute inset-0 bg-black/30 flex items-center justify-center transition-opacity duration-300">
+              <Button variant="ghost" className="text-white border border-white/60 hover:bg-white/20">
+                <Eye className="mr-2 h-4 w-4" />
+                Önizleme
+              </Button>
+            </div>
+          )}
+        </div>
+        
+        <div className="p-6">
+          <div className="flex items-center mb-3">
+            <div className="flex text-yellow-500">
+              <Star className="h-4 w-4 fill-current" />
+              <Star className="h-4 w-4 fill-current" />
+              <Star className="h-4 w-4 fill-current" />
+              <Star className="h-4 w-4 fill-current" />
+              <StarHalf className="h-4 w-4 fill-current" />
+            </div>
+            <span className="text-xs text-gray-500 ml-2">(4.5)</span>
           </div>
-          <h3 className="text-xl font-serif font-bold text-masqot-dark mb-2">
+          
+          <h3 className="text-xl font-serif font-bold text-masqot-dark mb-2 line-clamp-2 h-14">
             {book.title}
           </h3>
           <p className="text-masqot-secondary mb-2">{book.author}</p>
-          <p className="text-sm text-gray-600 mb-4 line-clamp-2">{book.description}</p>
-          <div className="flex items-center justify-between">
+          <p className="text-sm text-gray-600 mb-4 line-clamp-2 h-10">{book.description}</p>
+          
+          <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
             <span className="text-lg font-bold text-masqot-primary">
               {book.price}
             </span>
@@ -60,27 +77,44 @@ const BookCard = ({ book, onAddToCart, view }: BookCardProps) => {
 
   return (
     <Card
-      key={book.id}
-      className="book-card glass-card transition-all duration-300 hover:shadow-xl"
+      className="book-card glass-card transition-all duration-300 hover:shadow-xl overflow-hidden"
     >
       <div className="p-6 flex flex-col md:flex-row gap-6">
-        <img
-          src={book.cover}
-          alt={book.title}
-          className="w-full md:w-48 h-48 object-cover rounded-md"
-        />
-        <div className="flex-1">
-          <div className="mb-2">
-            <span className="text-xs font-medium px-2 py-1 rounded-full bg-masqot-soft text-masqot-primary">
-              {book.category}
-            </span>
+        <div className="relative w-full md:w-48 h-48 flex-shrink-0">
+          <img
+            src={book.cover}
+            alt={book.title}
+            className="w-full h-full object-cover rounded-md"
+          />
+          {isHovered && (
+            <div className="absolute inset-0 bg-black/30 flex items-center justify-center rounded-md">
+              <Button variant="ghost" size="sm" className="text-white border border-white/60 hover:bg-white/20">
+                <Eye className="mr-2 h-4 w-4" />
+                Önizleme
+              </Button>
+            </div>
+          )}
+        </div>
+        
+        <div className="flex-1" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+          <div className="flex items-center mb-2">
+            <div className="flex text-yellow-500">
+              <Star className="h-4 w-4 fill-current" />
+              <Star className="h-4 w-4 fill-current" />
+              <Star className="h-4 w-4 fill-current" />
+              <Star className="h-4 w-4 fill-current" />
+              <StarHalf className="h-4 w-4 fill-current" />
+            </div>
+            <span className="text-xs text-gray-500 ml-2">(4.5)</span>
           </div>
+          
           <h3 className="text-xl font-serif font-bold text-masqot-dark mb-2">
             {book.title}
           </h3>
           <p className="text-masqot-secondary mb-2">{book.author}</p>
           <p className="text-sm text-gray-600 mb-4">{book.description}</p>
-          <div className="flex items-center justify-between mt-auto">
+          
+          <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
             <span className="text-lg font-bold text-masqot-primary">
               {book.price}
             </span>

@@ -7,4 +7,6 @@ export interface BookType {
   price: string;
   category: string;
   description: string;
+  rating?: number;
+  reviewCount?: number;
 }
