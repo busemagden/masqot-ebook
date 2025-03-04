@@ -41,12 +41,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     try {
       localStorage.setItem('cart', JSON.stringify(items));
+      console.log('Cart saved to localStorage:', items);
     } catch (error) {
       console.error('Failed to save cart to localStorage:', error);
     }
   }, [items]);
 
   const addItem = (book: BookType) => {
+    console.log('Adding item to cart:', book);
     setItems(prevItems => {
       // Check if the item is already in the cart
       const existingItem = prevItems.find(item => item.id === book.id);

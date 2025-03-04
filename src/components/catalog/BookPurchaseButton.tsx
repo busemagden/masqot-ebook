@@ -41,8 +41,12 @@ const BookPurchaseButton = ({
     // Find the book in the catalog and add it to cart
     const book = bookCatalog.find(book => book.id === bookId);
     if (book) {
+      console.log('Adding book to cart:', book);
       addItem(book);
       onAddToCart(); // Keep the original callback for compatibility
+    } else {
+      console.error('Book not found in catalog:', bookId);
+      toast.error("Kitap kataloğda bulunamadı");
     }
   };
 

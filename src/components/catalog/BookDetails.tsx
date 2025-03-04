@@ -1,69 +1,88 @@
 
 import React from 'react';
+import { BookType } from '@/types/book';
+import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react';
+import BookRating from './BookRating';
 import BookPurchaseButton from './BookPurchaseButton';
 
 interface BookDetailsProps {
-  title: string;
-  author: string;
-  description: string;
-  price: string;
-  isComingSoon: boolean;
-  onAddToCart: () => void;
-  ratingComponent?: React.ReactNode;
-  view?: 'grid' | 'list';
+  book: BookType;
+  onClose: () => void;
+  onAddToCart: (bookId: number, bookTitle: string) => void;
 }
 
-const BookDetails = ({ 
-  title, 
-  author, 
-  description, 
-  price, 
-  isComingSoon, 
-  onAddToCart,
-  ratingComponent,
-  view = 'grid'
-}: BookDetailsProps) => {
-  if (view === 'grid') {
-    return (
-      <div className="p-6">
-        <div className="flex items-center mb-3">
-          {ratingComponent}
-        </div>
-        
-        <h3 className="text-xl font-serif font-bold text-masqot-dark mb-2 line-clamp-2 h-14">
-          {title}
-        </h3>
-        <p className="text-masqot-secondary mb-2">{author}</p>
-        <p className="text-sm text-gray-600 mb-4 line-clamp-2 h-10">{description}</p>
-        
-        <BookPurchaseButton 
-          isComingSoon={isComingSoon} 
-          onAddToCart={onAddToCart} 
-          price={price}
-          bookTitle={title}
-        />
-      </div>
-    );
-  }
-
+const BookDetails = ({ book, onClose, onAddToCart }: BookDetailsProps) => {
   return (
-    <div className="flex-1">
-      <div className="flex items-center mb-2">
-        {ratingComponent}
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="absolute right-2 top-2 z-10"
+          onClick={onClose}
+        >
+          <X className="h-5 w-5" />
+        </Button>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+          <div>
+            <img 
+              src={book.cover} 
+              alt={book.title} 
+              className="w-full h-auto object-cover rounded-md shadow-md"
+            />
+          </div>
+          
+          <div className="flex flex-col">
+            <h2 className="text-2xl font-bold mb-2">{book.title}</h2>
+            <p className="text-gray-600 mb-4">{book.author}</p>
+            
+            {book.rating && (
+              <div className="mb-4">
+                <BookRating rating={book.rating} reviewCount={book.reviewCount} />
+              </div>
+            )}
+            
+            <div className="mb-6">
+              <BookPurchaseButton 
+                isComingSoon={book.comingSoon || false} 
+                onAddToCart={() => onAddToCart(book.id, book.title)}
+                price={book.price}
+                bookTitle={book.title}
+                bookId={book.id}
+              />
+            </div>
+            
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold mb-2">Açıklama</h3>
+              <p className="text-gray-700">{book.description}</p>
+            </div>
+            
+            {book.topics && book.topics.length > 0 && (
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold mb-2">Konular</h3>
+                <div className="flex flex-wrap gap-2">
+                  {book.topics.map((topic, index) => (
+                    <span 
+                      key={index} 
+                      className="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                    >
+                      {topic}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {book.pages && (
+              <div className="text-sm text-gray-500">
+                Sayfa Sayısı: {book.pages}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
-      
-      <h3 className="text-xl font-serif font-bold text-masqot-dark mb-2">
-        {title}
-      </h3>
-      <p className="text-masqot-secondary mb-2">{author}</p>
-      <p className="text-sm text-gray-600 mb-4">{description}</p>
-      
-      <BookPurchaseButton 
-        isComingSoon={isComingSoon} 
-        onAddToCart={onAddToCart} 
-        price={price}
-        bookTitle={title}
-      />
     </div>
   );
 };

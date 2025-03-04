@@ -93,6 +93,7 @@ const BookListView = ({ books, onOpenPreview, onAddToCart }: BookListViewProps) 
                 onAddToCart={() => onAddToCart(book.id, book.title)}
                 price={book.price}
                 bookTitle={book.title}
+                bookId={book.id}
               />
             </div>
           </div>

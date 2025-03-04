@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -5,7 +6,7 @@ import { useAuth } from '@clerk/clerk-react';
 import CartDrawer from "@/components/cart/CartDrawer";
 
 const Header = () => {
-  const { isSignedIn, user } = useAuth();
+  const { isSignedIn, userId } = useAuth();
 
   return (
     <header className="flex items-center justify-between p-4 bg-white shadow">
@@ -14,9 +15,8 @@ const Header = () => {
       </div>
       <div className="flex items-center space-x-4">
         <CartDrawer />
-        {isSignedIn && user ? (
+        {isSignedIn ? (
           <div className="flex items-center space-x-2">
-            <span>{user.firstName}</span>
             <Link to="/my-books">
               <Button variant="outline">Kitaplarım</Button>
             </Link>

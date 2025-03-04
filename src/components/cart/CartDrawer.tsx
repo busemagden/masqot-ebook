@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
 import { X, ShoppingCart, Trash2 } from 'lucide-react';
@@ -22,6 +22,11 @@ const CartDrawer = () => {
   const { items, removeItem, clearCart, getTotal, itemCount } = useCart();
   const navigate = useNavigate();
   const { isSignedIn } = useAuth();
+  
+  // Debug log on mount
+  useEffect(() => {
+    console.log('CartDrawer mounted, items:', items);
+  }, [items]);
   
   const handleCheckout = async () => {
     if (!isSignedIn) {
