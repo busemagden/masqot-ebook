@@ -19,6 +19,7 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [loadedImages, setLoadedImages] = useState<string[]>([]);
+  const [loadingError, setLoadingError] = useState(false);
   const imageRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -29,6 +30,7 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
       setCurrentPage(0);
       setZoomLevel(1);
       setPosition({ x: 0, y: 0 });
+      setLoadingError(false);
       
       // Preload images
       const imagePromises = previewImages.map((src) => {
@@ -50,6 +52,7 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
         })
         .catch(error => {
           console.error("Error preloading images:", error);
+          setLoadingError(true);
         });
     }
   }, [isOpen, previewImages]);
@@ -184,35 +187,42 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
           onMouseLeave={handleMouseUp}
           style={{ cursor: isDragging ? 'grabbing' : (zoomLevel > 1 ? 'grab' : 'default') }}
         >
-          <AnimatePresence custom={currentPage} mode="wait">
-            <motion.div 
-              key={currentPage}
-              custom={1}
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className={`w-full h-full flex items-center justify-center page ${isPageTurning ? 'turning' : ''}`}
-            >
-              {previewImages[currentPage] && (
-                <img 
-                  ref={imageRef}
-                  src={previewImages[currentPage]} 
-                  alt={`${title} - Sayfa ${currentPage + 1}`} 
-                  className="max-h-full max-w-full object-contain shadow-lg transition-all duration-300"
-                  style={{ 
-                    maxHeight: "calc(80vh - 40px)",
-                    transform: `scale(${zoomLevel}) translate(${position.x / zoomLevel}px, ${position.y / zoomLevel}px)`,
-                    transition: isDragging ? 'none' : 'transform 0.3s ease'
-                  }}
-                  onError={(e) => {
-                    console.error(`Error loading image: ${previewImages[currentPage]}`);
-                    e.currentTarget.src = '/placeholder.svg';
-                  }}
-                />
-              )}
-            </motion.div>
-          </AnimatePresence>
+          {loadingError ? (
+            <div className="text-center p-8">
+              <p className="text-red-500 mb-4">Görseller yüklenirken bir hata oluştu.</p>
+              <Button onClick={() => window.location.reload()} variant="outline">Yeniden Dene</Button>
+            </div>
+          ) : (
+            <AnimatePresence custom={currentPage} mode="wait">
+              <motion.div 
+                key={currentPage}
+                custom={1}
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className={`w-full h-full flex items-center justify-center page ${isPageTurning ? 'turning' : ''}`}
+              >
+                {previewImages[currentPage] && (
+                  <img 
+                    ref={imageRef}
+                    src={previewImages[currentPage]} 
+                    alt={`${title} - Sayfa ${currentPage + 1}`} 
+                    className="max-h-full max-w-full object-contain shadow-lg transition-all duration-300"
+                    style={{ 
+                      maxHeight: "calc(80vh - 40px)",
+                      transform: `scale(${zoomLevel}) translate(${position.x / zoomLevel}px, ${position.y / zoomLevel}px)`,
+                      transition: isDragging ? 'none' : 'transform 0.3s ease'
+                    }}
+                    onError={(e) => {
+                      console.error(`Error loading image: ${previewImages[currentPage]}`);
+                      e.currentTarget.src = '/placeholder.svg';
+                    }}
+                  />
+                )}
+              </motion.div>
+            </AnimatePresence>
+          )}
 
           {/* Book edge shadow */}
           <div className="absolute h-full w-4 left-1/2 transform -translate-x-1/2 pointer-events-none"
@@ -226,7 +236,7 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
           <div className="absolute top-4 right-4 flex space-x-2">
             <Button 
               onClick={zoomIn} 
-              disabled={zoomLevel >= 3}
+              disabled={zoomLevel >= 3 || loadingError}
               className="bg-white/80 text-black hover:bg-white rounded-full p-2 flex items-center"
               variant="outline"
               size="icon"
@@ -235,7 +245,7 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
             </Button>
             <Button 
               onClick={zoomOut} 
-              disabled={zoomLevel <= 1}
+              disabled={zoomLevel <= 1 || loadingError}
               className="bg-white/80 text-black hover:bg-white rounded-full p-2 flex items-center"
               variant="outline"
               size="icon"
@@ -244,7 +254,7 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
             </Button>
             <Button 
               onClick={resetZoom} 
-              disabled={zoomLevel === 1 && position.x === 0 && position.y === 0}
+              disabled={(zoomLevel === 1 && position.x === 0 && position.y === 0) || loadingError}
               className="bg-white/80 text-black hover:bg-white rounded-full p-2 flex items-center"
               variant="outline"
               size="icon"
@@ -257,7 +267,7 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
           <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center gap-8">
             <Button 
               onClick={prevPage} 
-              disabled={currentPage === 0 || isPageTurning}
+              disabled={currentPage === 0 || isPageTurning || loadingError}
               className="bg-white/80 text-black hover:bg-white rounded-full p-3 flex items-center"
               variant="outline"
               size="icon"
@@ -271,7 +281,7 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
             
             <Button 
               onClick={nextPage} 
-              disabled={currentPage === previewImages.length - 1 || isPageTurning}
+              disabled={currentPage === previewImages.length - 1 || isPageTurning || loadingError}
               className="bg-white/80 text-black hover:bg-white rounded-full p-3 flex items-center"
               variant="outline"
               size="icon"
