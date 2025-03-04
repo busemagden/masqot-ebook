@@ -16,9 +16,12 @@ const Header = () => {
           <img 
             src="/lovable-uploads/69c0a793-1c2e-48d6-a8c1-e56524249ceb.png" 
             alt="Masqot Logo" 
-            className="h-8 w-auto" 
+            className="h-10 w-auto" // Increased size from h-8 to h-10
           />
-          <span className="text-sm font-medium text-gray-500">E-kitap</span>
+          <div className="flex flex-col">
+            <span className="text-sm font-medium text-gray-500">E-kitap</span>
+            <span className="text-sm font-semibold text-masqot-primary">#gelecegiokuyun</span>
+          </div>
         </Link>
       </div>
       <div className="flex items-center space-x-4">
