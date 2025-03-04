@@ -14,6 +14,7 @@ import Payment from "./pages/Payment";
 import Profile from "./pages/Profile";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailed from "./pages/PaymentFailed";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App = () => (
           />
           
           <Route path="/catalog" element={<Catalog />} />
+          <Route path="/contact" element={<Contact />} />
           
           {/* Payment pages */}
           <Route 

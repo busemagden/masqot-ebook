@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { useAuth } from '@clerk/clerk-react';
 import CartDrawer from "@/components/cart/CartDrawer";
-import { User } from 'lucide-react';
+import { User, Mail, Home, ExternalLink } from 'lucide-react';
 
 const Header = () => {
   const { isSignedIn } = useAuth();
@@ -16,7 +16,7 @@ const Header = () => {
           <img 
             src="/lovable-uploads/69c0a793-1c2e-48d6-a8c1-e56524249ceb.png" 
             alt="Masqot Logo" 
-            className="h-10 w-auto" // Increased size from h-8 to h-10
+            className="h-12 w-auto" // Increased size from h-10 to h-12
           />
           <div className="flex flex-col">
             <span className="text-sm font-medium text-gray-500">E-kitap</span>
@@ -24,9 +24,27 @@ const Header = () => {
           </div>
         </Link>
       </div>
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-3">
+        <Link to="/">
+          <Button variant="ghost" className="flex items-center gap-1">
+            <Home className="h-4 w-4" />
+            Anasayfa
+          </Button>
+        </Link>
+        <a href="https://masqot.co" target="_blank" rel="noopener noreferrer">
+          <Button variant="ghost" className="flex items-center gap-1">
+            <ExternalLink className="h-4 w-4" />
+            Blog
+          </Button>
+        </a>
         <Link to="/catalog">
           <Button variant="ghost">Katalog</Button>
+        </Link>
+        <Link to="/contact">
+          <Button variant="ghost" className="flex items-center gap-1">
+            <Mail className="h-4 w-4" />
+            Bizimle İletişime Geçin
+          </Button>
         </Link>
         <CartDrawer />
         {isSignedIn ? (
