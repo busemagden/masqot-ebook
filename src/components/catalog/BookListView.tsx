@@ -67,7 +67,7 @@ const BookListView = ({ books, onOpenPreview, onAddToCart }: BookListViewProps) 
               
               {book.rating && (
                 <div className="mt-2">
-                  <BookRating rating={book.rating} reviewCount={book.reviewCount} />
+                  <BookRating rating={book.rating} reviewCount={book.reviewCount} showCount={false} />
                 </div>
               )}
             </div>

@@ -12,9 +12,10 @@ interface BookCardProps {
   onOpenPreview?: (bookId: number) => void;
   onAddToCart: (bookId: number, bookTitle: string) => void;
   ratingComponent?: React.ReactNode;
+  view?: 'grid' | 'list';
 }
 
-const BookCard = ({ book, onOpenPreview = () => {}, onAddToCart, ratingComponent }: BookCardProps) => {
+const BookCard = ({ book, onOpenPreview = () => {}, onAddToCart, ratingComponent, view = 'grid' }: BookCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const isComingSoon = book.comingSoon || false;
   
@@ -49,12 +50,14 @@ const BookCard = ({ book, onOpenPreview = () => {}, onAddToCart, ratingComponent
             isComingSoon={isComingSoon}
             hasPreview={book.previewImages && book.previewImages.length > 0}
             onPreviewClick={() => onOpenPreview(book.id)}
+            view={view}
           />
         </motion.div>
         
         <BookBadges 
           book={book} 
           hoveredId={isHovered ? book.id : null}
+          view={view}
         />
       </div>
       
