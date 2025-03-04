@@ -1,4 +1,3 @@
-
 import { BookType } from "@/types/book";
 import BookCover from "./BookCover";
 import BookBadges from "./BookBadges";
@@ -81,6 +80,7 @@ const BookCard = ({ book, onOpenPreview = () => {}, onAddToCart, ratingComponent
         onAddToCart={() => onAddToCart(book.id, book.title)}
         price={book.price}
         bookTitle={book.title}
+        bookId={book.id}
       />
     </motion.div>
   );

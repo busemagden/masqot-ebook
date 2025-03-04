@@ -3,25 +3,28 @@ import { ShoppingCart, Clock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
-import { useAuth, useUser } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react";
+import { useCart } from "@/contexts/CartContext";
+import { bookCatalog } from "@/data/bookCatalog";
 
 interface BookPurchaseButtonProps {
   isComingSoon: boolean;
   onAddToCart: () => void;
   price: string;
   bookTitle: string;
+  bookId: number;
 }
 
 const BookPurchaseButton = ({ 
   isComingSoon, 
   onAddToCart, 
   price,
-  bookTitle
+  bookTitle,
+  bookId
 }: BookPurchaseButtonProps) => {
   const { isSignedIn } = useAuth();
-  const { user } = useUser();
   const navigate = useNavigate();
+  const { addItem } = useCart();
 
   const handlePurchase = () => {
     if (!isSignedIn) {
@@ -35,11 +38,12 @@ const BookPurchaseButton = ({
       return;
     }
 
-    // Kullanıcı giriş yapmışsa satın alma işlemine devam et
-    onAddToCart();
-    toast.success(`${bookTitle} sepete eklendi`, {
-      description: "Ödeme sayfasına gitmek için sepeti ziyaret edin.",
-    });
+    // Find the book in the catalog and add it to cart
+    const book = bookCatalog.find(book => book.id === bookId);
+    if (book) {
+      addItem(book);
+      onAddToCart(); // Keep the original callback for compatibility
+    }
   };
 
   return (
