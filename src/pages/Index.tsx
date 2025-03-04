@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Book, BookOpen, User, ShoppingCart } from "lucide-react";
@@ -60,12 +61,14 @@ const Index = () => {
           <p className="text-xl text-masqot-secondary max-w-2xl">
             Yapay zeka ve makine öğrenimi konularında uzmanlaşmanızı sağlayacak kapsamlı e-kitap koleksiyonumuzu keşfedin.
           </p>
-          <Button
-            className="mt-8 bg-masqot-primary hover:bg-masqot-secondary text-white px-8 py-6 text-lg rounded-full transition-all duration-300"
-          >
-            <BookOpen className="mr-2 h-5 w-5" />
-            Koleksiyonu Keşfet
-          </Button>
+          <Link to="/catalog">
+            <Button
+              className="mt-8 bg-masqot-primary hover:bg-masqot-secondary text-white px-8 py-6 text-lg rounded-full transition-all duration-300"
+            >
+              <BookOpen className="mr-2 h-5 w-5" />
+              Koleksiyonu Keşfet
+            </Button>
+          </Link>
         </div>
       </section>
 
@@ -111,6 +114,16 @@ const Index = () => {
             </Card>
           ))}
         </div>
+        <div className="text-center mt-10">
+          <Link to="/catalog">
+            <Button
+              variant="outline"
+              className="border-masqot-primary text-masqot-primary hover:bg-masqot-soft"
+            >
+              Tüm Koleksiyonu Görüntüle
+            </Button>
+          </Link>
+        </div>
       </section>
 
       {/* Call to Action */}
@@ -122,12 +135,14 @@ const Index = () => {
           <p className="text-lg text-masqot-secondary mb-8 max-w-2xl mx-auto">
             E-kitaplarımıza erişmek için hesap oluşturun ve yapay zeka dünyasını keşfetmeye başlayın.
           </p>
-          <Button
-            className="bg-masqot-primary hover:bg-masqot-secondary text-white px-8 py-6 text-lg rounded-full transition-all duration-300"
-          >
-            <User className="mr-2 h-5 w-5" />
-            Hesap Oluştur
-          </Button>
+          <Link to="/login">
+            <Button
+              className="bg-masqot-primary hover:bg-masqot-secondary text-white px-8 py-6 text-lg rounded-full transition-all duration-300"
+            >
+              <User className="mr-2 h-5 w-5" />
+              Hesap Oluştur
+            </Button>
+          </Link>
         </div>
       </section>
       

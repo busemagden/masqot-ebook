@@ -20,6 +20,9 @@ const Header = () => {
           <Link to="/" className="text-masqot-dark hover:text-masqot-primary transition-colors duration-200">
             Ana Sayfa
           </Link>
+          <Link to="/catalog" className="text-masqot-dark hover:text-masqot-primary transition-colors duration-200">
+            Koleksiyon
+          </Link>
           <Link to="/kitaplar" className="text-masqot-dark hover:text-masqot-primary transition-colors duration-200">
             Kitaplar
           </Link>
@@ -29,7 +32,7 @@ const Header = () => {
         </nav>
         
         <div className="flex items-center space-x-4">
-          <Link to="/kitaplar">
+          <Link to="/catalog">
             <Button variant="ghost" className="text-masqot-dark hover:text-masqot-primary hover:bg-masqot-soft">
               <BookOpen className="h-5 w-5" />
               <span className="ml-2 hidden sm:inline">Katalog</span>
