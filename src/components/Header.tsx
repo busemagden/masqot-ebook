@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, User, ShoppingCart, Rss } from "lucide-react";
+import { BookOpen, User, ShoppingCart, Users, GraduationCap } from "lucide-react";
 
 const Header = () => {
   return (
@@ -16,19 +16,32 @@ const Header = () => {
           <span className="ml-2 text-xl font-serif font-bold text-masqot-dark">E-Kitap</span>
         </Link>
         
-        <nav className="hidden md:flex items-center space-x-8">
+        <nav className="hidden md:flex items-center space-x-6">
           <Link to="/" className="text-masqot-dark hover:text-masqot-primary transition-colors duration-200">
             Ana Sayfa
           </Link>
           <Link to="/catalog" className="text-masqot-dark hover:text-masqot-primary transition-colors duration-200">
             Koleksiyon
           </Link>
+          <a href="https://academy.masqot.co" target="_blank" rel="noopener noreferrer" className="text-masqot-dark hover:text-masqot-primary transition-colors duration-200 flex items-center">
+            <GraduationCap className="h-4 w-4 mr-1" />
+            Academy
+          </a>
           <a href="https://masqot.co" target="_blank" rel="noopener noreferrer" className="text-masqot-dark hover:text-masqot-primary transition-colors duration-200">
             Blog
           </a>
+          <a 
+            href="https://chat.whatsapp.com/G4tshtPS1RE64PEecc3QWc" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-full flex items-center text-sm font-medium transition-colors"
+          >
+            <Users className="h-3.5 w-3.5 mr-1" />
+            Topluluğa Katıl
+          </a>
         </nav>
         
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-3">
           <Link to="/catalog">
             <Button variant="ghost" className="text-masqot-dark hover:text-masqot-primary hover:bg-masqot-soft">
               <BookOpen className="h-5 w-5" />
@@ -42,6 +55,14 @@ const Header = () => {
               0
             </span>
           </Button>
+          <a 
+            href="https://chat.whatsapp.com/G4tshtPS1RE64PEecc3QWc" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="md:hidden bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded-full flex items-center text-xs font-medium transition-colors"
+          >
+            <Users className="h-3 w-3" />
+          </a>
           <Link to="/login">
             <Button className="bg-masqot-primary hover:bg-masqot-secondary text-white">
               <User className="h-5 w-5" />
