@@ -16,9 +16,7 @@ if (!PUBLISHABLE_KEY) {
 
 // Üretim ortamı için domain ayarlarını ekleyelim
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || PUBLISHABLE_KEY;
-const domain = window.location.hostname === "ebook.masqot.co" ? "ebook.masqot.co" : undefined;
 
-// We need to wrap ClerkProvider inside BrowserRouter to access routing functions
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
@@ -35,9 +33,8 @@ function ClerkProviderWithRoutes() {
     <ClerkProvider 
       publishableKey={clerkPubKey}
       afterSignOutUrl="/"
-      {...(domain ? { domain } : {})}
-      routerPush={(to) => navigate(to)}
-      routerReplace={(to) => navigate(to, { replace: true })}
+      routing="path"
+      navigate={(to) => navigate(to)}
     >
       <App />
     </ClerkProvider>
