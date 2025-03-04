@@ -10,7 +10,6 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Catalog from "./pages/Catalog";
-import MyBooks from "./pages/MyBooks";
 import Payment from "./pages/Payment";
 import Profile from "./pages/Profile";
 
@@ -62,13 +61,13 @@ const App = () => (
               } 
             />
             
-            {/* Sadece giriş yapmış kullanıcılar erişebilir */}
+            {/* Redirect /my-books to /profile */}
             <Route 
               path="/my-books" 
               element={
                 <>
                   <SignedIn>
-                    <MyBooks />
+                    <Navigate to="/profile" replace />
                   </SignedIn>
                   <SignedOut>
                     <Navigate to="/login" replace />

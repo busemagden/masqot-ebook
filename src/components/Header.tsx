@@ -24,17 +24,12 @@ const Header = () => {
         </Link>
         <CartDrawer />
         {isSignedIn ? (
-          <div className="flex items-center space-x-2">
-            <Link to="/my-books">
-              <Button variant="outline">Kitaplarım</Button>
-            </Link>
-            <Link to="/profile">
-              <Button variant="outline" className="flex items-center gap-2">
-                <User className="h-4 w-4" />
-                Profil
-              </Button>
-            </Link>
-          </div>
+          <Link to="/profile">
+            <Button variant="outline" className="flex items-center gap-2">
+              <User className="h-4 w-4" />
+              Profil
+            </Button>
+          </Link>
         ) : (
           <Link to="/login">
             <Button variant="outline">Giriş Yap</Button>
