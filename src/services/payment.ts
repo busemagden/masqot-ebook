@@ -1,7 +1,7 @@
 
 // Payment service utilities for e-commerce
 import { BookType } from '@/types/book';
-import { createPaytrPaymentLink, paytrConfig } from './paytr';
+import { createPaytrPaymentLink, paytrConfig, usePaytrLink } from './paytr';
 import { toast } from 'sonner';
 
 // Sepet öğelerini PayTR formatına dönüştür
@@ -41,6 +41,20 @@ export const initiateCheckout = async (items: Array<{id: number, title: string, 
       basketItems,
       orderId
     });
+    
+    // Paytr link kullanma seçeneği
+    const useDirectLink = true; // Bu değişkeni true yaparak direkt linki kullanabilirsiniz
+    
+    if (useDirectLink) {
+      // Direkt olarak sabit PayTR linkini kullan (siz verdiniz)
+      const paytrDirectLink = "https://www.paytr.com/link/L7JOl3u";
+      usePaytrLink(paytrDirectLink);
+      
+      return {
+        success: true,
+        message: 'Ödeme sayfası açıldı'
+      };
+    }
     
     // PayTR API'si boş olduğunda uyarı
     if (!paytrConfig.merchantId || !paytrConfig.merchantKey || !paytrConfig.merchantSalt) {

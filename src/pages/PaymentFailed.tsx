@@ -21,6 +21,9 @@ const PaymentFailed = () => {
     if (merchantOid) {
       // Başarısız ödeme işlemlerini yap
       processFailedPayment(merchantOid, reason);
+    } else {
+      // Standart başarısız mesajı göster (doğrudan sayfaya gelindiğinde)
+      processFailedPayment("unknown", "Ödeme işlemi tamamlanamadı");
     }
   }, [location]);
 

@@ -32,9 +32,9 @@ interface PaytrLinkResponse {
 
 // Paytr konfigürasyon ayarları
 export const paytrConfig: PaytrConfig = {
-  merchantId: "", // PayTR merchant ID
-  merchantKey: "", // PayTR merchant key
-  merchantSalt: "", // PayTR merchant salt
+  merchantId: "XXXXXX", // PayTR merchant ID
+  merchantKey: "XXXXXX", // PayTR merchant key
+  merchantSalt: "XXXXXX", // PayTR merchant salt
   apiUrl: "https://www.paytr.com/odeme/api/get-token"
 };
 
@@ -44,7 +44,7 @@ const base64Encode = (str: string): string => {
 };
 
 // Hash oluşturma fonksiyonu
-const createHash = (payload: string, merchantKey: string, merchantSalt: string): string => {
+const createHash = async (payload: string, merchantKey: string, merchantSalt: string): Promise<string> => {
   const toBeHashed = payload + merchantSalt;
   return generateSHA256Hash(toBeHashed);
 };
@@ -154,4 +154,10 @@ export const verifyPaytrPayment = async (
   // Bu fonksiyon genellikle backend tarafında yapılır
   // Frontend tarafında sadece ödeme sonucu sayfalarına yönlendirme yapılır
   return true; // Demo için her zaman başarılı kabul ediyoruz
+};
+
+// Mevcut bir PayTR ödeme linkini kullanma
+export const usePaytrLink = (paymentLink: string): void => {
+  // Yeni pencerede ödeme linkini aç
+  window.open(paymentLink, '_blank');
 };
