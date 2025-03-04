@@ -10,7 +10,7 @@ interface BookDetailsProps {
   isComingSoon: boolean;
   onAddToCart: () => void;
   ratingComponent?: React.ReactNode;
-  view: 'grid' | 'list';
+  view?: 'grid' | 'list';
 }
 
 const BookDetails = ({ 
@@ -21,7 +21,7 @@ const BookDetails = ({
   isComingSoon, 
   onAddToCart,
   ratingComponent,
-  view
+  view = 'grid'
 }: BookDetailsProps) => {
   if (view === 'grid') {
     return (
@@ -39,7 +39,8 @@ const BookDetails = ({
         <BookPurchaseButton 
           isComingSoon={isComingSoon} 
           onAddToCart={onAddToCart} 
-          price={price} 
+          price={price}
+          bookTitle={title}
         />
       </div>
     );
@@ -60,7 +61,8 @@ const BookDetails = ({
       <BookPurchaseButton 
         isComingSoon={isComingSoon} 
         onAddToCart={onAddToCart} 
-        price={price} 
+        price={price}
+        bookTitle={title}
       />
     </div>
   );

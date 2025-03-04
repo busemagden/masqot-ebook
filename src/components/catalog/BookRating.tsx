@@ -3,10 +3,11 @@ import { Star, StarHalf } from "lucide-react";
 
 interface BookRatingProps {
   rating?: number;
+  reviewCount?: number;
   showCount?: boolean;
 }
 
-const BookRating = ({ rating = 4.5, showCount = false }: BookRatingProps) => {
+const BookRating = ({ rating = 4.5, reviewCount = 0, showCount = false }: BookRatingProps) => {
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 !== 0;
   
@@ -19,6 +20,7 @@ const BookRating = ({ rating = 4.5, showCount = false }: BookRatingProps) => {
         {hasHalfStar && <StarHalf className="h-4 w-4 fill-current" />}
       </div>
       {showCount && <span className="text-xs text-gray-500 ml-2">({rating})</span>}
+      {reviewCount > 0 && <span className="text-xs text-gray-500 ml-2">({reviewCount} değerlendirme)</span>}
     </div>
   );
 };

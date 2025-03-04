@@ -6,19 +6,21 @@ import { Eye, Clock } from "lucide-react";
 interface BookCoverProps {
   cover: string;
   title: string;
-  isComingSoon: boolean;
-  hasPreview: boolean;
-  onPreviewClick: (e: React.MouseEvent) => void;
-  view: 'grid' | 'list';
+  isPreviewable?: boolean;
+  isComingSoon?: boolean;
+  hasPreview?: boolean;
+  onPreviewClick?: (e: React.MouseEvent) => void;
+  view?: 'grid' | 'list';
 }
 
 const BookCover = ({ 
   cover, 
   title, 
-  isComingSoon, 
-  hasPreview, 
-  onPreviewClick,
-  view
+  isComingSoon = false, 
+  hasPreview = true, 
+  onPreviewClick = () => {},
+  view = 'grid',
+  isPreviewable = false
 }: BookCoverProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -37,7 +39,7 @@ const BookCover = ({
             transform: isHovered ? 'scale(1.05)' : 'scale(1)',
           }}
         />
-        {isHovered && (
+        {isHovered && isPreviewable && (
           <div className="absolute inset-0 bg-black/30 flex items-center justify-center transition-opacity duration-300">
             {isComingSoon ? (
               <Button 
@@ -76,7 +78,7 @@ const BookCover = ({
         alt={title}
         className="w-full h-full object-cover rounded-md"
       />
-      {isHovered && (
+      {isHovered && isPreviewable && (
         <div className="absolute inset-0 bg-black/30 flex items-center justify-center rounded-md">
           {isComingSoon ? (
             <Button 

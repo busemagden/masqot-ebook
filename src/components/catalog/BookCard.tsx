@@ -5,15 +5,16 @@ import BookBadges from "./BookBadges";
 import BookRating from "./BookRating";
 import BookPurchaseButton from "./BookPurchaseButton";
 import { motion } from "framer-motion";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface BookCardProps {
   book: BookType;
-  onOpenPreview: (bookId: number) => void;
+  onOpenPreview?: (bookId: number) => void;
   onAddToCart: (bookId: number, bookTitle: string) => void;
+  ratingComponent?: React.ReactNode;
 }
 
-const BookCard = ({ book, onOpenPreview, onAddToCart }: BookCardProps) => {
+const BookCard = ({ book, onOpenPreview = () => {}, onAddToCart, ratingComponent }: BookCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const isComingSoon = book.comingSoon || false;
   
@@ -42,13 +43,19 @@ const BookCard = ({ book, onOpenPreview, onAddToCart }: BookCardProps) => {
           onClick={() => onOpenPreview(book.id)}
         >
           <BookCover
-            coverImage={book.cover}
+            cover={book.cover}
             title={book.title}
             isPreviewable={true}
+            isComingSoon={isComingSoon}
+            hasPreview={book.previewImages && book.previewImages.length > 0}
+            onPreviewClick={() => onOpenPreview(book.id)}
           />
         </motion.div>
         
-        <BookBadges book={book} />
+        <BookBadges 
+          book={book} 
+          hoveredId={isHovered ? book.id : null}
+        />
       </div>
       
       <div className="mb-2 flex-grow">
@@ -58,7 +65,7 @@ const BookCard = ({ book, onOpenPreview, onAddToCart }: BookCardProps) => {
         <p className="text-gray-600 text-sm mb-2">{book.author}</p>
         
         {book.rating && (
-          <BookRating rating={book.rating} reviewCount={book.reviewCount || 0} />
+          ratingComponent || <BookRating rating={book.rating} reviewCount={book.reviewCount} />
         )}
         
         <p className="text-gray-500 text-sm mt-4 line-clamp-3">

@@ -5,7 +5,7 @@ import BookPurchaseButton from "./BookPurchaseButton";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { motion } from "framer-motion";
-import BookBadges from "./BookBadges";
+import BookBadges, { isBestseller, hasPreview, isComingSoon } from "./BookBadges";
 
 interface BookListViewProps {
   books: BookType[];
@@ -42,7 +42,21 @@ const BookListView = ({ books, onOpenPreview, onAddToCart }: BookListViewProps) 
               className="w-full h-full object-cover rounded-md"
             />
             <div className="absolute top-2 left-2">
-              <BookBadges book={book} />
+              {isBestseller(book.id) && (
+                <div className="bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center shadow-md mb-2">
+                  Bestseller
+                </div>
+              )}
+              {hasPreview(book) && (
+                <div className="bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center shadow-md mb-2">
+                  Önizleme
+                </div>
+              )}
+              {isComingSoon(book) && (
+                <div className="bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center shadow-md mb-2">
+                  Yakında
+                </div>
+              )}
             </div>
           </div>
           
@@ -53,7 +67,7 @@ const BookListView = ({ books, onOpenPreview, onAddToCart }: BookListViewProps) 
               
               {book.rating && (
                 <div className="mt-2">
-                  <BookRating rating={book.rating} reviewCount={book.reviewCount || 0} />
+                  <BookRating rating={book.rating} reviewCount={book.reviewCount} />
                 </div>
               )}
             </div>

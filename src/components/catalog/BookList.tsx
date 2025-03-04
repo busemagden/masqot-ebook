@@ -27,15 +27,28 @@ const BookList = ({ books, viewMode, onAddToCart }: BookListProps) => {
     return <EmptyState />;
   }
 
+  // Default preview handler, in a real app this would open a modal or navigate to preview page
+  const handleOpenPreview = (bookId: number) => {
+    console.log(`Opening preview for book ${bookId}`);
+  };
+
   console.log("Books in BookList:", books);
 
   return (
     <AnimatePresence>
       {!isLoading && (
         viewMode === 'grid' ? (
-          <BookGridView books={books} onAddToCart={onAddToCart} />
+          <BookGridView 
+            books={books} 
+            onAddToCart={onAddToCart} 
+            onOpenPreview={handleOpenPreview} 
+          />
         ) : (
-          <BookListView books={books} onAddToCart={onAddToCart} />
+          <BookListView 
+            books={books} 
+            onAddToCart={onAddToCart} 
+            onOpenPreview={handleOpenPreview} 
+          />
         )
       )}
     </AnimatePresence>

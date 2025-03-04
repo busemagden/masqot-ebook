@@ -2,38 +2,19 @@
 import { useState } from 'react';
 import BookCard from './BookCard';
 import { BookType } from '@/types/book';
-import { Star, StarHalf, Tag, TrendingUp, Award, Sparkles, Clock } from 'lucide-react';
+import { Star, StarHalf } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface BookGridViewProps {
   books: BookType[];
   onAddToCart: (bookId: number, bookTitle: string) => void;
+  onOpenPreview?: (bookId: number) => void;
 }
 
-const BookGridView = ({ books, onAddToCart }: BookGridViewProps) => {
+const BookGridView = ({ books, onAddToCart, onOpenPreview = () => {} }: BookGridViewProps) => {
   const [hoveredBook, setHoveredBook] = useState<number | null>(null);
 
-  // Function to determine if a book is bestselling
-  const isBestseller = (bookId: number) => {
-    return bookId === 9;
-  };
-
-  // Function to get a random trending value
-  const getTrendingValue = (bookId: number) => {
-    return Math.floor(Math.random() * 50) + 50; // Random number between 50-100%
-  };
-
-  // Function to check if a book has preview
-  const hasPreview = (book: BookType) => {
-    return book.previewImages && book.previewImages.length > 0;
-  };
-
-  // Function to check if a book is coming soon
-  const isComingSoon = (book: BookType) => {
-    return book.comingSoon === true;
-  };
-
-  const renderRating = (rating: number = 4.5) => {
+  const renderRating = (rating: number = 4.5, reviewCount: number = 0) => {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
     
@@ -46,6 +27,7 @@ const BookGridView = ({ books, onAddToCart }: BookGridViewProps) => {
           {hasHalfStar && <StarHalf className="h-4 w-4 fill-current" />}
         </div>
         <span className="text-xs text-gray-500 ml-2">({rating})</span>
+        {reviewCount > 0 && <span className="text-xs text-gray-500 ml-1">{reviewCount} değerlendirme</span>}
       </div>
     );
   };
@@ -67,46 +49,11 @@ const BookGridView = ({ books, onAddToCart }: BookGridViewProps) => {
           onMouseEnter={() => setHoveredBook(book.id)}
           onMouseLeave={() => setHoveredBook(null)}
         >
-          {isBestseller(book.id) && (
-            <div className="absolute -top-3 -left-3 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center z-10 shadow-md">
-              <Award className="w-3 h-3 mr-1" />
-              Bestseller
-            </div>
-          )}
-          
-          {hasPreview(book) && (
-            <div className="absolute -top-3 -right-3 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center z-10 shadow-md">
-              <Sparkles className="w-3 h-3 mr-1" />
-              Önizleme
-            </div>
-          )}
-
-          {isComingSoon(book) && (
-            <div className="absolute -top-3 -right-3 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center z-10 shadow-md">
-              <Clock className="w-3 h-3 mr-1" />
-              Yakında
-            </div>
-          )}
-          
-          {hoveredBook === book.id && (
-            <div className="absolute -top-2 right-2 bg-masqot-primary text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 animate-fade-in shadow-sm">
-              <Tag className="w-3 h-3 mr-1" />
-              {book.category}
-            </div>
-          )}
-
-          {book.reviewCount && book.reviewCount > 50 && !isComingSoon(book) && (
-            <div className="absolute bottom-2 left-2 bg-teal-500/80 text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <TrendingUp className="w-3 h-3 mr-1" />
-              Trend {getTrendingValue(book.id)}%
-            </div>
-          )}
-          
           <BookCard 
             book={book} 
             onAddToCart={onAddToCart} 
-            view="grid" 
-            ratingComponent={book.rating ? renderRating(book.rating) : undefined}
+            onOpenPreview={onOpenPreview}
+            ratingComponent={book.rating ? renderRating(book.rating, book.reviewCount) : undefined}
           />
         </motion.div>
       ))}
