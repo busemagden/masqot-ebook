@@ -1,5 +1,5 @@
 
-import { ShoppingCart, Clock } from "lucide-react";
+import { ShoppingCart, Clock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";

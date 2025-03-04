@@ -32,6 +32,15 @@ const App = () => (
             } 
           />
           
+          <Route 
+            path="/sign-up" 
+            element={
+              <SignedOut>
+                <Login />
+              </SignedOut>
+            } 
+          />
+          
           <Route path="/catalog" element={<Catalog />} />
           
           {/* Sadece giriş yapmış kullanıcılar erişebilir */}

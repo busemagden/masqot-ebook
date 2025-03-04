@@ -1,13 +1,17 @@
 
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { SignIn } from "@clerk/clerk-react";
+import { Link } from "react-router-dom";
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardHeader } from "@/components/ui/card";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import LoginForm from "@/components/auth/LoginForm";
+import RegisterForm from "@/components/auth/RegisterForm";
+import SocialLogin from "@/components/auth/SocialLogin";
 
 const Login = () => {
   const [activeTab, setActiveTab] = useState("login");
-  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-masqot-soft">
@@ -15,33 +19,59 @@ const Login = () => {
       
       <main className="flex-grow flex items-center justify-center p-4 py-16">
         <div className="w-full max-w-md animate-fade-in">
-          <div className="glass-card p-6 rounded-lg shadow-md bg-white/80 backdrop-blur-md">
-            <h1 className="text-2xl font-serif text-center mb-6">
-              {activeTab === "login" ? "Hoş Geldiniz" : "Hesap Oluştur"}
-            </h1>
+          <Card className="glass-card p-6 rounded-lg shadow-md bg-white/80 backdrop-blur-md">
+            <CardHeader className="p-0 pb-6">
+              <h1 className="text-2xl font-serif text-center">
+                {activeTab === "login" ? "Hoş Geldiniz" : "Hesap Oluştur"}
+              </h1>
+            </CardHeader>
             
-            <SignIn 
-              routing="path" 
-              path="/login"
-              redirectUrl="/my-books"
-              appearance={{
-                elements: {
-                  rootBox: "w-full mx-auto",
-                  card: "shadow-none bg-transparent",
-                  headerTitle: "hidden",
-                  headerSubtitle: "hidden",
-                  socialButtonsBlockButton: "bg-white hover:bg-gray-50",
-                  formButtonPrimary: "bg-masqot-primary hover:bg-masqot-secondary",
-                  footerAction: "text-masqot-primary hover:text-masqot-secondary"
-                }
-              }}
-            />
+            <SignedOut>
+              <Tabs 
+                defaultValue="login" 
+                value={activeTab} 
+                onValueChange={setActiveTab}
+                className="w-full"
+              >
+                <TabsList className="grid w-full grid-cols-2 mb-6">
+                  <TabsTrigger value="login">Giriş</TabsTrigger>
+                  <TabsTrigger value="register">Kayıt</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="login">
+                  <LoginForm />
+                </TabsContent>
+                
+                <TabsContent value="register">
+                  <RegisterForm />
+                </TabsContent>
+              </Tabs>
+            </SignedOut>
+            
+            <SignedIn>
+              <div className="py-8 text-center">
+                <h2 className="text-xl font-medium text-gray-800 mb-2">Zaten giriş yapmışsınız</h2>
+                <p className="text-gray-600 mb-4">
+                  Kitap koleksiyonunuza göz atmak ister misiniz?
+                </p>
+                <Link 
+                  to="/my-books"
+                  className="inline-block bg-masqot-primary hover:bg-masqot-secondary text-white px-4 py-2 rounded-md transition-colors"
+                >
+                  Kitaplarım
+                </Link>
+              </div>
+            </SignedIn>
             
             <div className="mt-6 text-center text-sm text-gray-500">
               {activeTab === "login" ? (
                 <p>
                   Hesabınız yok mu?{" "}
-                  <Link to="/sign-up" className="text-masqot-primary hover:underline">
+                  <Link 
+                    to="#" 
+                    onClick={() => setActiveTab("register")} 
+                    className="text-masqot-primary hover:underline"
+                  >
                     Kayıt olun
                   </Link>
                 </p>
@@ -55,7 +85,7 @@ const Login = () => {
                 </p>
               )}
             </div>
-          </div>
+          </Card>
         </div>
       </main>
       
