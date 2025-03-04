@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { SignIn, SignUp, SignedIn, SignedOut } from "@clerk/clerk-react";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
@@ -20,11 +21,33 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
+          
+          {/* Clerk ile entegre edilmiş kimlik doğrulama rotaları */}
+          <Route 
+            path="/login" 
+            element={
+              <SignedOut>
+                <Login />
+              </SignedOut>
+            } 
+          />
+          
           <Route path="/catalog" element={<Catalog />} />
           
-          {/* Make MyBooks accessible without requiring authentication for now */}
-          <Route path="/my-books" element={<MyBooks />} />
+          {/* Sadece giriş yapmış kullanıcılar erişebilir */}
+          <Route 
+            path="/my-books" 
+            element={
+              <>
+                <SignedIn>
+                  <MyBooks />
+                </SignedIn>
+                <SignedOut>
+                  <Navigate to="/login" replace />
+                </SignedOut>
+              </>
+            } 
+          />
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

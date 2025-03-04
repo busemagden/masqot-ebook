@@ -1,9 +1,10 @@
 
-import { ShoppingCart, Clock, LogIn } from "lucide-react";
+import { ShoppingCart, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 interface BookPurchaseButtonProps {
   isComingSoon: boolean;
@@ -18,17 +19,12 @@ const BookPurchaseButton = ({
   price,
   bookTitle
 }: BookPurchaseButtonProps) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isSignedIn } = useAuth();
+  const { user } = useUser();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Local storage'dan giriş durumunu kontrol et
-    const loggedInStatus = localStorage.getItem('isLoggedIn') === 'true';
-    setIsLoggedIn(loggedInStatus);
-  }, []);
-
   const handlePurchase = () => {
-    if (!isLoggedIn) {
+    if (!isSignedIn) {
       toast.error("Giriş yapmanız gerekiyor", {
         description: "Kitap satın almak için önce giriş yapmalısınız.",
         action: {
@@ -59,12 +55,12 @@ const BookPurchaseButton = ({
           <Clock className="mr-2 h-4 w-4" />
           Yakında
         </Button>
-      ) : !isLoggedIn ? (
+      ) : !isSignedIn ? (
         <Button
           className="bg-masqot-primary hover:bg-masqot-secondary text-white transition-all duration-300"
           onClick={() => navigate("/login")}
         >
-          <LogIn className="mr-2 h-4 w-4" />
+          <User className="mr-2 h-4 w-4" />
           Giriş Yap
         </Button>
       ) : (
