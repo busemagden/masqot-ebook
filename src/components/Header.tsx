@@ -2,13 +2,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { useAuth } from '@clerk/clerk-react';
 import CartDrawer from "@/components/cart/CartDrawer";
-import { User, Mail, Home, ExternalLink, Menu, X } from 'lucide-react';
+import { Mail, Home, ExternalLink, Menu } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const Header = () => {
-  const { isSignedIn } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -51,18 +49,6 @@ const Header = () => {
           </Button>
         </Link>
         <CartDrawer />
-        {isSignedIn ? (
-          <Link to="/profile">
-            <Button variant="outline" className="flex items-center gap-2">
-              <User className="h-4 w-4" />
-              Profil
-            </Button>
-          </Link>
-        ) : (
-          <Link to="/login">
-            <Button variant="outline">Giriş Yap</Button>
-          </Link>
-        )}
       </div>
 
       {/* Mobile menu button */}
@@ -105,20 +91,6 @@ const Header = () => {
                   Bizimle İletişime Geçin
                 </Button>
               </Link>
-              {isSignedIn ? (
-                <Link to="/profile" className="w-full" onClick={() => setIsOpen(false)}>
-                  <Button variant="outline" className="w-full justify-start gap-2">
-                    <User className="h-4 w-4" />
-                    Profil
-                  </Button>
-                </Link>
-              ) : (
-                <Link to="/login" className="w-full" onClick={() => setIsOpen(false)}>
-                  <Button variant="outline" className="w-full justify-start">
-                    Giriş Yap
-                  </Button>
-                </Link>
-              )}
             </div>
           </SheetContent>
         </Sheet>

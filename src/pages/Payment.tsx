@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
@@ -10,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { CheckCircle, ArrowLeft, CreditCard } from "lucide-react";
-import { useAuth } from "@clerk/clerk-react";
 
 const Payment = () => {
   const { items, getTotal, clearCart } = useCart();
@@ -21,21 +19,14 @@ const Payment = () => {
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
   const [cardHolder, setCardHolder] = useState("");
-  const { isSignedIn } = useAuth();
   
-  // Redirect to login if not signed in
+  // Redirect to catalog if cart is empty
   React.useEffect(() => {
-    if (!isSignedIn) {
-      toast.error("Ödeme sayfasına erişmek için giriş yapmalısınız");
-      navigate("/login");
-    }
-    
-    // Redirect to catalog if cart is empty
     if (items.length === 0 && !completed) {
       toast.error("Sepetinizde ürün bulunmuyor");
       navigate("/catalog");
     }
-  }, [isSignedIn, items.length, navigate, completed]);
+  }, [items.length, navigate, completed]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,20 +109,12 @@ const Payment = () => {
             
             <h2 className="text-3xl font-bold mb-4">Ödeme Başarılı!</h2>
             <p className="text-lg text-gray-600 mb-8">
-              Satın aldığınız kitaplar hesabınıza tanımlanmıştır. Kitaplarım sayfasından erişebilirsiniz.
+              Satın aldığınız kitaplar kitaplığınıza eklenmiştir. İyi okumalar dileriz.
             </p>
             
             <div className="space-y-4">
               <Button 
                 className="w-full bg-masqot-primary hover:bg-masqot-secondary"
-                onClick={() => navigate("/my-books")}
-              >
-                Kitaplarımı Görüntüle
-              </Button>
-              
-              <Button 
-                variant="outline" 
-                className="w-full"
                 onClick={() => navigate("/catalog")}
               >
                 Kataloga Dön

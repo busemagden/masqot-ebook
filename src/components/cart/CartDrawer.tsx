@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
@@ -15,12 +16,10 @@ import {
 import { toast } from "sonner";
 import { initiateCheckout } from '@/services/payment';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@clerk/clerk-react';
 
 const CartDrawer = () => {
   const { items, removeItem, clearCart, getTotal, itemCount } = useCart();
   const navigate = useNavigate();
-  const { isSignedIn } = useAuth();
   
   // Debug log on mount
   useEffect(() => {
@@ -28,16 +27,6 @@ const CartDrawer = () => {
   }, [items]);
   
   const handleCheckout = async () => {
-    if (!isSignedIn) {
-      toast.error("Ödeme yapabilmek için giriş yapmalısınız", {
-        action: {
-          label: "Giriş Yap",
-          onClick: () => navigate("/login")
-        }
-      });
-      return;
-    }
-    
     if (items.length === 0) {
       toast.error("Sepetinizde ürün bulunmuyor");
       return;
