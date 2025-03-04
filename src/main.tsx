@@ -12,14 +12,16 @@ if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Clerk Publishable Key");
 }
 
-// Add the domain for production
+// Üretim ortamı için domain ayarlarını ekleyelim
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || PUBLISHABLE_KEY;
+const domain = window.location.hostname === "ebook.masqot.co" ? "ebook.masqot.co" : undefined;
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ClerkProvider 
       publishableKey={clerkPubKey}
       afterSignOutUrl="/"
+      {...(domain ? { domain } : {})}
     >
       <App />
     </ClerkProvider>

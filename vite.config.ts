@@ -20,5 +20,5 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: '/', // Ensure proper base path for production
+  base: '/', // Üretim ortamı için doğru temel yol
 }));
