@@ -22,6 +22,7 @@ const BookCard = ({ book, onAddToCart, view, ratingComponent }: BookCardProps) =
     e.stopPropagation();
     // Only open preview if preview images are available
     if (book.previewImages && book.previewImages.length > 0) {
+      console.log("Opening preview for book:", book.title, "with images:", book.previewImages);
       setIsPreviewOpen(true);
     } else {
       console.log("No preview available for book:", book.title);
@@ -73,7 +74,7 @@ const BookCard = ({ book, onAddToCart, view, ratingComponent }: BookCardProps) =
             isOpen={isPreviewOpen} 
             onClose={() => setIsPreviewOpen(false)} 
             title={book.title}
-            previewImages={book.previewImages!}
+            previewImages={book.previewImages}
           />
         )}
       </>
@@ -115,7 +116,7 @@ const BookCard = ({ book, onAddToCart, view, ratingComponent }: BookCardProps) =
           isOpen={isPreviewOpen} 
           onClose={() => setIsPreviewOpen(false)} 
           title={book.title}
-          previewImages={book.previewImages!}
+          previewImages={book.previewImages}
         />
       )}
     </>

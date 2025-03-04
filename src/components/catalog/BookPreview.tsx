@@ -18,17 +18,41 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
   const [zoomLevel, setZoomLevel] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [loadedImages, setLoadedImages] = useState<string[]>([]);
   const imageRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Reset state when dialog opens
+  // Reset state and preload images when dialog opens
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && previewImages && previewImages.length > 0) {
+      console.log("Preview opened with images:", previewImages);
       setCurrentPage(0);
       setZoomLevel(1);
       setPosition({ x: 0, y: 0 });
+      
+      // Preload images
+      const imagePromises = previewImages.map((src) => {
+        return new Promise<string>((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve(src);
+          img.onerror = () => {
+            console.error(`Failed to load image: ${src}`);
+            reject(new Error(`Failed to load image: ${src}`));
+          };
+          img.src = src;
+        });
+      });
+      
+      Promise.all(imagePromises)
+        .then(loadedSrcs => {
+          console.log("All images preloaded:", loadedSrcs);
+          setLoadedImages(loadedSrcs);
+        })
+        .catch(error => {
+          console.error("Error preloading images:", error);
+        });
     }
-  }, [isOpen]);
+  }, [isOpen, previewImages]);
 
   const nextPage = () => {
     if (currentPage < previewImages.length - 1 && !isPageTurning) {
@@ -130,6 +154,12 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
     })
   };
 
+  // Safety check: ensure we have images to display
+  if (!previewImages || previewImages.length === 0) {
+    console.error("No preview images provided to BookPreview component");
+    return null;
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-5xl w-[90vw] max-h-[90vh] p-0 overflow-hidden bg-white">
@@ -164,17 +194,23 @@ const BookPreview = ({ isOpen, onClose, title, previewImages }: BookPreviewProps
               exit="exit"
               className={`w-full h-full flex items-center justify-center page ${isPageTurning ? 'turning' : ''}`}
             >
-              <img 
-                ref={imageRef}
-                src={previewImages[currentPage]} 
-                alt={`${title} - Sayfa ${currentPage + 1}`} 
-                className="max-h-full max-w-full object-contain shadow-lg transition-all duration-300"
-                style={{ 
-                  maxHeight: "calc(80vh - 40px)",
-                  transform: `scale(${zoomLevel}) translate(${position.x / zoomLevel}px, ${position.y / zoomLevel}px)`,
-                  transition: isDragging ? 'none' : 'transform 0.3s ease'
-                }}
-              />
+              {previewImages[currentPage] && (
+                <img 
+                  ref={imageRef}
+                  src={previewImages[currentPage]} 
+                  alt={`${title} - Sayfa ${currentPage + 1}`} 
+                  className="max-h-full max-w-full object-contain shadow-lg transition-all duration-300"
+                  style={{ 
+                    maxHeight: "calc(80vh - 40px)",
+                    transform: `scale(${zoomLevel}) translate(${position.x / zoomLevel}px, ${position.y / zoomLevel}px)`,
+                    transition: isDragging ? 'none' : 'transform 0.3s ease'
+                  }}
+                  onError={(e) => {
+                    console.error(`Error loading image: ${previewImages[currentPage]}`);
+                    e.currentTarget.src = '/placeholder.svg';
+                  }}
+                />
+              )}
             </motion.div>
           </AnimatePresence>
 

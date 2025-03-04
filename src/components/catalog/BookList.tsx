@@ -27,6 +27,8 @@ const BookList = ({ books, viewMode, onAddToCart }: BookListProps) => {
     return <EmptyState />;
   }
 
+  console.log("Books in BookList:", books);
+
   return (
     <AnimatePresence>
       {!isLoading && (
