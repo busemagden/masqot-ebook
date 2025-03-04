@@ -9,10 +9,19 @@ interface BookCardProps {
   book: BookType;
   onAddToCart: (bookId: number, bookTitle: string) => void;
   view: 'grid' | 'list';
+  ratingComponent?: React.ReactNode;
 }
 
-const BookCard = ({ book, onAddToCart, view }: BookCardProps) => {
+const BookCard = ({ book, onAddToCart, view, ratingComponent }: BookCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  
+  const handlePreviewClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsPreviewOpen(true);
+    // In a real implementation, this would open a preview modal
+    console.log("Preview clicked for book:", book.title);
+  };
 
   if (view === 'grid') {
     return (
@@ -32,7 +41,7 @@ const BookCard = ({ book, onAddToCart, view }: BookCardProps) => {
           />
           {isHovered && (
             <div className="absolute inset-0 bg-black/30 flex items-center justify-center transition-opacity duration-300">
-              <Button variant="ghost" className="text-white border border-white/60 hover:bg-white/20">
+              <Button variant="ghost" className="text-white border border-white/60 hover:bg-white/20" onClick={handlePreviewClick}>
                 <Eye className="mr-2 h-4 w-4" />
                 Önizleme
               </Button>
@@ -42,14 +51,15 @@ const BookCard = ({ book, onAddToCart, view }: BookCardProps) => {
         
         <div className="p-6">
           <div className="flex items-center mb-3">
-            <div className="flex text-yellow-500">
-              <Star className="h-4 w-4 fill-current" />
-              <Star className="h-4 w-4 fill-current" />
-              <Star className="h-4 w-4 fill-current" />
-              <Star className="h-4 w-4 fill-current" />
-              <StarHalf className="h-4 w-4 fill-current" />
-            </div>
-            <span className="text-xs text-gray-500 ml-2">(4.5)</span>
+            {ratingComponent || (
+              <div className="flex text-yellow-500">
+                <Star className="h-4 w-4 fill-current" />
+                <Star className="h-4 w-4 fill-current" />
+                <Star className="h-4 w-4 fill-current" />
+                <Star className="h-4 w-4 fill-current" />
+                <StarHalf className="h-4 w-4 fill-current" />
+              </div>
+            )}
           </div>
           
           <h3 className="text-xl font-serif font-bold text-masqot-dark mb-2 line-clamp-2 h-14">
@@ -67,7 +77,7 @@ const BookCard = ({ book, onAddToCart, view }: BookCardProps) => {
               onClick={() => onAddToCart(book.id, book.title)}
             >
               <ShoppingCart className="mr-2 h-4 w-4" />
-              Sepete Ekle
+              Satın Al
             </Button>
           </div>
         </div>
@@ -88,7 +98,7 @@ const BookCard = ({ book, onAddToCart, view }: BookCardProps) => {
           />
           {isHovered && (
             <div className="absolute inset-0 bg-black/30 flex items-center justify-center rounded-md">
-              <Button variant="ghost" size="sm" className="text-white border border-white/60 hover:bg-white/20">
+              <Button variant="ghost" size="sm" className="text-white border border-white/60 hover:bg-white/20" onClick={handlePreviewClick}>
                 <Eye className="mr-2 h-4 w-4" />
                 Önizleme
               </Button>
@@ -98,14 +108,15 @@ const BookCard = ({ book, onAddToCart, view }: BookCardProps) => {
         
         <div className="flex-1" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
           <div className="flex items-center mb-2">
-            <div className="flex text-yellow-500">
-              <Star className="h-4 w-4 fill-current" />
-              <Star className="h-4 w-4 fill-current" />
-              <Star className="h-4 w-4 fill-current" />
-              <Star className="h-4 w-4 fill-current" />
-              <StarHalf className="h-4 w-4 fill-current" />
-            </div>
-            <span className="text-xs text-gray-500 ml-2">(4.5)</span>
+            {ratingComponent || (
+              <div className="flex text-yellow-500">
+                <Star className="h-4 w-4 fill-current" />
+                <Star className="h-4 w-4 fill-current" />
+                <Star className="h-4 w-4 fill-current" />
+                <Star className="h-4 w-4 fill-current" />
+                <StarHalf className="h-4 w-4 fill-current" />
+              </div>
+            )}
           </div>
           
           <h3 className="text-xl font-serif font-bold text-masqot-dark mb-2">
@@ -123,7 +134,7 @@ const BookCard = ({ book, onAddToCart, view }: BookCardProps) => {
               onClick={() => onAddToCart(book.id, book.title)}
             >
               <ShoppingCart className="mr-2 h-4 w-4" />
-              Sepete Ekle
+              Satın Al
             </Button>
           </div>
         </div>

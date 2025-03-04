@@ -18,6 +18,23 @@ const BookList = ({ books, viewMode, onAddToCart }: BookListProps) => {
     return <EmptyState />;
   }
 
+  const renderRating = (rating: number = 4.5) => {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    
+    return (
+      <div className="flex items-center">
+        <div className="flex text-yellow-500">
+          {[...Array(fullStars)].map((_, i) => (
+            <Star key={i} className="h-4 w-4 fill-current" />
+          ))}
+          {hasHalfStar && <StarHalf className="h-4 w-4 fill-current" />}
+        </div>
+        <span className="text-xs text-gray-500 ml-2">({rating})</span>
+      </div>
+    );
+  };
+
   if (viewMode === 'grid') {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -38,6 +55,7 @@ const BookList = ({ books, viewMode, onAddToCart }: BookListProps) => {
               book={book} 
               onAddToCart={onAddToCart} 
               view="grid" 
+              ratingComponent={book.rating ? renderRating(book.rating) : undefined}
             />
           </div>
         ))}
@@ -65,6 +83,7 @@ const BookList = ({ books, viewMode, onAddToCart }: BookListProps) => {
             book={book} 
             onAddToCart={onAddToCart} 
             view="list" 
+            ratingComponent={book.rating ? renderRating(book.rating) : undefined}
           />
         </div>
       ))}
