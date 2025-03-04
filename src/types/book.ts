@@ -10,4 +10,5 @@ export interface BookType {
   rating?: number;
   reviewCount?: number;
   previewImages?: string[];
+  comingSoon?: boolean;
 }

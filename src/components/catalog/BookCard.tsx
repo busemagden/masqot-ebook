@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Star, StarHalf, Eye } from "lucide-react";
+import { ShoppingCart, Star, StarHalf, Eye, Clock } from "lucide-react";
 import { BookType } from '@/types/book';
 import BookPreview from './BookPreview';
 
@@ -28,6 +28,7 @@ const BookCard = ({ book, onAddToCart, view, ratingComponent }: BookCardProps) =
   };
 
   const hasPreview = book.previewImages && book.previewImages.length > 0;
+  const isComingSoon = book.comingSoon === true;
 
   if (view === 'grid') {
     return (
@@ -48,15 +49,26 @@ const BookCard = ({ book, onAddToCart, view, ratingComponent }: BookCardProps) =
             />
             {isHovered && (
               <div className="absolute inset-0 bg-black/30 flex items-center justify-center transition-opacity duration-300">
-                <Button 
-                  variant="ghost" 
-                  className={`text-white border border-white/60 hover:bg-white/20 ${!hasPreview ? 'opacity-50 cursor-not-allowed' : ''}`} 
-                  onClick={handlePreviewClick}
-                  disabled={!hasPreview}
-                >
-                  <Eye className="mr-2 h-4 w-4" />
-                  {hasPreview ? 'Önizleme' : 'Önizleme Yok'}
-                </Button>
+                {isComingSoon ? (
+                  <Button 
+                    variant="ghost" 
+                    className="text-white border border-white/60 hover:bg-white/20 opacity-70 cursor-not-allowed"
+                    disabled
+                  >
+                    <Clock className="mr-2 h-4 w-4" />
+                    Yakında
+                  </Button>
+                ) : (
+                  <Button 
+                    variant="ghost" 
+                    className={`text-white border border-white/60 hover:bg-white/20 ${!hasPreview ? 'opacity-50 cursor-not-allowed' : ''}`} 
+                    onClick={handlePreviewClick}
+                    disabled={!hasPreview}
+                  >
+                    <Eye className="mr-2 h-4 w-4" />
+                    {hasPreview ? 'Önizleme' : 'Önizleme Yok'}
+                  </Button>
+                )}
               </div>
             )}
           </div>
@@ -85,11 +97,21 @@ const BookCard = ({ book, onAddToCart, view, ratingComponent }: BookCardProps) =
                 {book.price}
               </span>
               <Button
-                className="bg-masqot-primary hover:bg-masqot-secondary text-white transition-all duration-300"
-                onClick={() => onAddToCart(book.id, book.title)}
+                className={`${isComingSoon ? 'bg-gray-400 hover:bg-gray-500' : 'bg-masqot-primary hover:bg-masqot-secondary'} text-white transition-all duration-300`}
+                onClick={() => !isComingSoon && onAddToCart(book.id, book.title)}
+                disabled={isComingSoon}
               >
-                <ShoppingCart className="mr-2 h-4 w-4" />
-                Satın Al
+                {isComingSoon ? (
+                  <>
+                    <Clock className="mr-2 h-4 w-4" />
+                    Yakında
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                    Satın Al
+                  </>
+                )}
               </Button>
             </div>
           </div>
@@ -121,16 +143,28 @@ const BookCard = ({ book, onAddToCart, view, ratingComponent }: BookCardProps) =
             />
             {isHovered && (
               <div className="absolute inset-0 bg-black/30 flex items-center justify-center rounded-md">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className={`text-white border border-white/60 hover:bg-white/20 ${!hasPreview ? 'opacity-50 cursor-not-allowed' : ''}`} 
-                  onClick={handlePreviewClick}
-                  disabled={!hasPreview}
-                >
-                  <Eye className="mr-2 h-4 w-4" />
-                  {hasPreview ? 'Önizleme' : 'Önizleme Yok'}
-                </Button>
+                {isComingSoon ? (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white border border-white/60 hover:bg-white/20 opacity-70 cursor-not-allowed"
+                    disabled
+                  >
+                    <Clock className="mr-2 h-4 w-4" />
+                    Yakında
+                  </Button>
+                ) : (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className={`text-white border border-white/60 hover:bg-white/20 ${!hasPreview ? 'opacity-50 cursor-not-allowed' : ''}`} 
+                    onClick={handlePreviewClick}
+                    disabled={!hasPreview}
+                  >
+                    <Eye className="mr-2 h-4 w-4" />
+                    {hasPreview ? 'Önizleme' : 'Önizleme Yok'}
+                  </Button>
+                )}
               </div>
             )}
           </div>
@@ -159,11 +193,21 @@ const BookCard = ({ book, onAddToCart, view, ratingComponent }: BookCardProps) =
                 {book.price}
               </span>
               <Button
-                className="bg-masqot-primary hover:bg-masqot-secondary text-white transition-all duration-300"
-                onClick={() => onAddToCart(book.id, book.title)}
+                className={`${isComingSoon ? 'bg-gray-400 hover:bg-gray-500' : 'bg-masqot-primary hover:bg-masqot-secondary'} text-white transition-all duration-300`}
+                onClick={() => !isComingSoon && onAddToCart(book.id, book.title)}
+                disabled={isComingSoon}
               >
-                <ShoppingCart className="mr-2 h-4 w-4" />
-                Satın Al
+                {isComingSoon ? (
+                  <>
+                    <Clock className="mr-2 h-4 w-4" />
+                    Yakında
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                    Satın Al
+                  </>
+                )}
               </Button>
             </div>
           </div>

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import BookCard from './BookCard';
 import EmptyState from './EmptyState';
 import { BookType } from '@/types/book';
-import { Star, StarHalf, Tag, TrendingUp, Award, Sparkles } from 'lucide-react';
+import { Star, StarHalf, Tag, TrendingUp, Award, Sparkles, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface BookListProps {
@@ -60,6 +60,11 @@ const BookList = ({ books, viewMode, onAddToCart }: BookListProps) => {
     return book.previewImages && book.previewImages.length > 0;
   };
 
+  // Function to check if a book is coming soon
+  const isComingSoon = (book: BookType) => {
+    return book.comingSoon === true;
+  };
+
   if (viewMode === 'grid') {
     return (
       <AnimatePresence>
@@ -93,6 +98,13 @@ const BookList = ({ books, viewMode, onAddToCart }: BookListProps) => {
                     Önizleme
                   </div>
                 )}
+
+                {isComingSoon(book) && (
+                  <div className="absolute -top-3 -right-3 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center z-10 shadow-md">
+                    <Clock className="w-3 h-3 mr-1" />
+                    Yakında
+                  </div>
+                )}
                 
                 {hoveredBook === book.id && (
                   <div className="absolute -top-2 right-2 bg-masqot-primary text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 animate-fade-in shadow-sm">
@@ -101,7 +113,7 @@ const BookList = ({ books, viewMode, onAddToCart }: BookListProps) => {
                   </div>
                 )}
 
-                {book.reviewCount && book.reviewCount > 50 && (
+                {book.reviewCount && book.reviewCount > 50 && !isComingSoon(book) && (
                   <div className="absolute bottom-2 left-2 bg-teal-500/80 text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <TrendingUp className="w-3 h-3 mr-1" />
                     Trend {getTrendingValue(book.id)}%
@@ -154,6 +166,13 @@ const BookList = ({ books, viewMode, onAddToCart }: BookListProps) => {
                   Önizleme
                 </div>
               )}
+
+              {isComingSoon(book) && (
+                <div className="absolute -top-3 right-3 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center z-10 shadow-md">
+                  <Clock className="w-3 h-3 mr-1" />
+                  Yakında
+                </div>
+              )}
               
               {hoveredBook === book.id && (
                 <div className="absolute -top-2 left-24 bg-masqot-primary text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 animate-fade-in shadow-sm">
@@ -162,7 +181,7 @@ const BookList = ({ books, viewMode, onAddToCart }: BookListProps) => {
                 </div>
               )}
               
-              {book.reviewCount && book.reviewCount > 50 && (
+              {book.reviewCount && book.reviewCount > 50 && !isComingSoon(book) && (
                 <div className="absolute bottom-12 left-12 bg-teal-500/80 text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <TrendingUp className="w-3 h-3 mr-1" />
                   Trend {getTrendingValue(book.id)}%
