@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, User } from "lucide-react";
+import { BookOpen, User, ShoppingCart } from "lucide-react";
 
 const Header = () => {
   return (
@@ -35,6 +35,13 @@ const Header = () => {
               <span className="ml-2 hidden sm:inline">Katalog</span>
             </Button>
           </Link>
+          <Button variant="ghost" className="text-masqot-dark hover:text-masqot-primary hover:bg-masqot-soft relative">
+            <ShoppingCart className="h-5 w-5" />
+            <span className="ml-2 hidden sm:inline">Sepet</span>
+            <span className="absolute -top-1 -right-1 bg-masqot-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              0
+            </span>
+          </Button>
           <Link to="/login">
             <Button className="bg-masqot-primary hover:bg-masqot-secondary text-white">
               <User className="h-5 w-5" />

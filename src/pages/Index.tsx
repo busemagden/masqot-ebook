@@ -2,9 +2,10 @@
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Book, BookOpen, User } from "lucide-react";
+import { Book, BookOpen, User, ShoppingCart } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useToast } from "@/hooks/use-toast";
 
 const featuredBooks = [
   {
@@ -32,6 +33,19 @@ const featuredBooks = [
 
 const Index = () => {
   const [isHovered, setIsHovered] = useState<number | null>(null);
+  const { toast } = useToast();
+
+  const handleAddToCart = (bookId: number, bookTitle: string) => {
+    // Here you would integrate with a real cart system
+    console.log(`Added book ${bookId} to cart`);
+    
+    // Show toast notification
+    toast({
+      title: "Sepete Eklendi!",
+      description: `${bookTitle} sepetinize eklendi.`,
+      duration: 3000,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-masqot-soft flex flex-col">
@@ -87,9 +101,10 @@ const Index = () => {
                   </span>
                   <Button
                     className="bg-masqot-primary hover:bg-masqot-secondary text-white transition-all duration-300"
+                    onClick={() => handleAddToCart(book.id, book.title)}
                   >
-                    <Book className="mr-2 h-4 w-4" />
-                    Satın Al
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                    Sepete Ekle
                   </Button>
                 </div>
               </div>
