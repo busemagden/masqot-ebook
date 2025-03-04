@@ -1,9 +1,10 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BookCard from './BookCard';
 import EmptyState from './EmptyState';
 import { BookType } from '@/types/book';
-import { Star, StarHalf, Tag } from 'lucide-react';
+import { Star, StarHalf, Tag, TrendingUp, Award } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface BookListProps {
   books: BookType[];
@@ -13,6 +14,15 @@ interface BookListProps {
 
 const BookList = ({ books, viewMode, onAddToCart }: BookListProps) => {
   const [hoveredBook, setHoveredBook] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading state for smoother transitions
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [books]);
 
   if (books.length === 0) {
     return <EmptyState />;
@@ -35,59 +45,123 @@ const BookList = ({ books, viewMode, onAddToCart }: BookListProps) => {
     );
   };
 
+  // Function to determine if a book is bestselling (for this demo, books with ID 9 and 10 are bestsellers)
+  const isBestseller = (bookId: number) => {
+    return [9, 10].includes(bookId);
+  };
+
+  // Function to get a random trending value (just for visual enhancement)
+  const getTrendingValue = (bookId: number) => {
+    return Math.floor(Math.random() * 50) + 50; // Random number between 50-100%
+  };
+
   if (viewMode === 'grid') {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {books.map((book) => (
-          <div 
-            key={book.id}
-            className="relative transition-all duration-300 hover:-translate-y-2"
-            onMouseEnter={() => setHoveredBook(book.id)}
-            onMouseLeave={() => setHoveredBook(null)}
+      <AnimatePresence>
+        {!isLoading && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
           >
-            {hoveredBook === book.id && (
-              <div className="absolute -top-2 -right-2 bg-masqot-primary text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 animate-fade-in">
-                <Tag className="w-3 h-3 mr-1" />
-                {book.category}
-              </div>
-            )}
-            <BookCard 
-              book={book} 
-              onAddToCart={onAddToCart} 
-              view="grid" 
-              ratingComponent={book.rating ? renderRating(book.rating) : undefined}
-            />
-          </div>
-        ))}
-      </div>
+            {books.map((book, index) => (
+              <motion.div 
+                key={book.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className="relative transition-all duration-300 hover:-translate-y-2 group"
+                onMouseEnter={() => setHoveredBook(book.id)}
+                onMouseLeave={() => setHoveredBook(null)}
+              >
+                {isBestseller(book.id) && (
+                  <div className="absolute -top-3 -left-3 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center z-10 shadow-md">
+                    <Award className="w-3 h-3 mr-1" />
+                    Bestseller
+                  </div>
+                )}
+                
+                {hoveredBook === book.id && (
+                  <div className="absolute -top-2 -right-2 bg-masqot-primary text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 animate-fade-in shadow-sm">
+                    <Tag className="w-3 h-3 mr-1" />
+                    {book.category}
+                  </div>
+                )}
+
+                {book.reviewCount && book.reviewCount > 50 && (
+                  <div className="absolute bottom-2 left-2 bg-teal-500/80 text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <TrendingUp className="w-3 h-3 mr-1" />
+                    Trend {getTrendingValue(book.id)}%
+                  </div>
+                )}
+                
+                <BookCard 
+                  book={book} 
+                  onAddToCart={onAddToCart} 
+                  view="grid" 
+                  ratingComponent={book.rating ? renderRating(book.rating) : undefined}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     );
   }
 
   return (
-    <div className="space-y-8">
-      {books.map((book) => (
-        <div 
-          key={book.id}
-          className="relative transition-all duration-300 hover:-translate-y-1"
-          onMouseEnter={() => setHoveredBook(book.id)}
-          onMouseLeave={() => setHoveredBook(null)}
+    <AnimatePresence>
+      {!isLoading && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="space-y-8"
         >
-          {hoveredBook === book.id && (
-            <div className="absolute -top-2 left-2 bg-masqot-primary text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 animate-fade-in">
-              <Tag className="w-3 h-3 mr-1" />
-              {book.category}
-            </div>
-          )}
-          <BookCard 
-            key={book.id} 
-            book={book} 
-            onAddToCart={onAddToCart} 
-            view="list" 
-            ratingComponent={book.rating ? renderRating(book.rating) : undefined}
-          />
-        </div>
-      ))}
-    </div>
+          {books.map((book, index) => (
+            <motion.div 
+              key={book.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+              className="relative transition-all duration-300 hover:-translate-y-1 group"
+              onMouseEnter={() => setHoveredBook(book.id)}
+              onMouseLeave={() => setHoveredBook(null)}
+            >
+              {isBestseller(book.id) && (
+                <div className="absolute -top-3 -left-3 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center z-10 shadow-md">
+                  <Award className="w-3 h-3 mr-1" />
+                  Bestseller
+                </div>
+              )}
+              
+              {hoveredBook === book.id && (
+                <div className="absolute -top-2 left-2 bg-masqot-primary text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 animate-fade-in shadow-sm">
+                  <Tag className="w-3 h-3 mr-1" />
+                  {book.category}
+                </div>
+              )}
+              
+              {book.reviewCount && book.reviewCount > 50 && (
+                <div className="absolute bottom-12 left-12 bg-teal-500/80 text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <TrendingUp className="w-3 h-3 mr-1" />
+                  Trend {getTrendingValue(book.id)}%
+                </div>
+              )}
+              
+              <BookCard 
+                key={book.id} 
+                book={book} 
+                onAddToCart={onAddToCart} 
+                view="list" 
+                ratingComponent={book.rating ? renderRating(book.rating) : undefined}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 
