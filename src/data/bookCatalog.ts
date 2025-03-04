@@ -4,6 +4,24 @@ import { BookType } from '@/types/book';
 // Book catalog data
 export const bookCatalog: BookType[] = [
   {
+    id: 9,
+    title: "Dijital Çağda Başarının Formülü",
+    author: "MASQOT Team",
+    cover: "/lovable-uploads/02b6a973-aac4-40b1-b116-de88d72b509b.png",
+    price: "₺499",
+    category: "AI Tools",
+    description: "20 Etkili AI Aracıyla İşinizi Adım Adım İleriye Taşıyın. İş dünyasında yapay zeka araçlarını kullanarak verimliliği artırmanın yollarını öğreten kapsamlı bir rehber.",
+    rating: 4.9,
+    reviewCount: 124,
+    previewImages: [
+      "/lovable-uploads/b56f5f9f-70c4-466c-b85a-7717c3aa30fc.png",
+      "/lovable-uploads/87243fdd-8dbf-4411-afac-39b60e1b39fe.png",
+      "/lovable-uploads/dfba1129-8ac9-4a50-85c7-30436671a3fd.png",
+      "/lovable-uploads/fa26c9b6-4187-4988-a9dd-83fe5fb084df.png",
+      "/lovable-uploads/7279815a-e3fd-4e77-8921-976a199b6ff8.png"
+    ]
+  },
+  {
     id: 1,
     title: "AI ve Makine Öğrenimi Temelleri",
     author: "MASQOT Team",
@@ -74,24 +92,6 @@ export const bookCatalog: BookType[] = [
     price: "₺279",
     category: "AI Ethics",
     description: "Yapay zeka uygulamalarında etik kuralları, sorumlulukları ve karşılaşılan zorlukları ele alan kapsamlı bir inceleme."
-  },
-  {
-    id: 9,
-    title: "Dijital Çağda Başarının Formülü",
-    author: "MASQOT Team",
-    cover: "/lovable-uploads/02b6a973-aac4-40b1-b116-de88d72b509b.png",
-    price: "₺499",
-    category: "AI Tools",
-    description: "20 Etkili AI Aracıyla İşinizi Adım Adım İleriye Taşıyın. İş dünyasında yapay zeka araçlarını kullanarak verimliliği artırmanın yollarını öğreten kapsamlı bir rehber."
-  },
-  {
-    id: 10,
-    title: "Yapay Zeka İle İş Dünyasında Fark Yaratın",
-    author: "MASQOT Team",
-    cover: "/lovable-uploads/fc9fea45-0ec6-4eed-9ee9-f4371f2c3d70.png",
-    price: "₺469",
-    category: "Business AI",
-    description: "Modern iş dünyasında rekabet avantajı sağlamak için yapay zeka teknolojilerini nasıl kullanacağınızı anlatan stratejik bir kılavuz."
   }
 ];
 

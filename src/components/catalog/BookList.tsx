@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import BookCard from './BookCard';
 import EmptyState from './EmptyState';
 import { BookType } from '@/types/book';
-import { Star, StarHalf, Tag, TrendingUp, Award } from 'lucide-react';
+import { Star, StarHalf, Tag, TrendingUp, Award, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface BookListProps {
@@ -45,14 +45,19 @@ const BookList = ({ books, viewMode, onAddToCart }: BookListProps) => {
     );
   };
 
-  // Function to determine if a book is bestselling (for this demo, books with ID 9 and 10 are bestsellers)
+  // Function to determine if a book is bestselling (first book is bestseller)
   const isBestseller = (bookId: number) => {
-    return [9, 10].includes(bookId);
+    return bookId === 9;
   };
 
   // Function to get a random trending value (just for visual enhancement)
   const getTrendingValue = (bookId: number) => {
     return Math.floor(Math.random() * 50) + 50; // Random number between 50-100%
+  };
+
+  // Function to check if a book has preview
+  const hasPreview = (book: BookType) => {
+    return book.previewImages && book.previewImages.length > 0;
   };
 
   if (viewMode === 'grid') {
@@ -82,8 +87,15 @@ const BookList = ({ books, viewMode, onAddToCart }: BookListProps) => {
                   </div>
                 )}
                 
+                {hasPreview(book) && (
+                  <div className="absolute -top-3 -right-3 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center z-10 shadow-md">
+                    <Sparkles className="w-3 h-3 mr-1" />
+                    Önizleme
+                  </div>
+                )}
+                
                 {hoveredBook === book.id && (
-                  <div className="absolute -top-2 -right-2 bg-masqot-primary text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 animate-fade-in shadow-sm">
+                  <div className="absolute -top-2 right-2 bg-masqot-primary text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 animate-fade-in shadow-sm">
                     <Tag className="w-3 h-3 mr-1" />
                     {book.category}
                   </div>
@@ -136,8 +148,15 @@ const BookList = ({ books, viewMode, onAddToCart }: BookListProps) => {
                 </div>
               )}
               
+              {hasPreview(book) && (
+                <div className="absolute -top-3 right-3 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center z-10 shadow-md">
+                  <Sparkles className="w-3 h-3 mr-1" />
+                  Önizleme
+                </div>
+              )}
+              
               {hoveredBook === book.id && (
-                <div className="absolute -top-2 left-2 bg-masqot-primary text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 animate-fade-in shadow-sm">
+                <div className="absolute -top-2 left-24 bg-masqot-primary text-white text-xs font-medium px-2 py-1 rounded-full flex items-center z-10 animate-fade-in shadow-sm">
                   <Tag className="w-3 h-3 mr-1" />
                   {book.category}
                 </div>

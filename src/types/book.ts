@@ -9,4 +9,5 @@ export interface BookType {
   description: string;
   rating?: number;
   reviewCount?: number;
+  previewImages?: string[];
 }
