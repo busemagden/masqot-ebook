@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, User, ShoppingCart } from "lucide-react";
+import { BookOpen, User, ShoppingCart, Rss } from "lucide-react";
 
 const Header = () => {
   return (
@@ -23,12 +23,9 @@ const Header = () => {
           <Link to="/catalog" className="text-masqot-dark hover:text-masqot-primary transition-colors duration-200">
             Koleksiyon
           </Link>
-          <Link to="/kitaplar" className="text-masqot-dark hover:text-masqot-primary transition-colors duration-200">
-            Kitaplar
-          </Link>
-          <Link to="/hakkimizda" className="text-masqot-dark hover:text-masqot-primary transition-colors duration-200">
-            Hakkımızda
-          </Link>
+          <a href="https://masqot.co" target="_blank" rel="noopener noreferrer" className="text-masqot-dark hover:text-masqot-primary transition-colors duration-200">
+            Blog
+          </a>
         </nav>
         
         <div className="flex items-center space-x-4">
