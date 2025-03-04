@@ -36,6 +36,8 @@ function ClerkProviderWithRoutes() {
       publishableKey={clerkPubKey}
       afterSignOutUrl="/"
       {...(domain ? { domain } : {})}
+      routerPush={(to) => navigate(to)}
+      routerReplace={(to) => navigate(to, { replace: true })}
     >
       <App />
     </ClerkProvider>
