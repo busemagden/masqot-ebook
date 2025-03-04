@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { useAuth } from '@clerk/clerk-react';
 import CartDrawer from "@/components/cart/CartDrawer";
-import { Book } from 'lucide-react';
+import { Book, User } from 'lucide-react';
 
 const Header = () => {
   const { isSignedIn } = useAuth();
@@ -27,6 +27,12 @@ const Header = () => {
           <div className="flex items-center space-x-2">
             <Link to="/my-books">
               <Button variant="outline">Kitaplarım</Button>
+            </Link>
+            <Link to="/profile">
+              <Button variant="outline" className="flex items-center gap-2">
+                <User className="h-4 w-4" />
+                Profil
+              </Button>
             </Link>
           </div>
         ) : (

@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import Catalog from "./pages/Catalog";
 import MyBooks from "./pages/MyBooks";
 import Payment from "./pages/Payment";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +69,21 @@ const App = () => (
                 <>
                   <SignedIn>
                     <MyBooks />
+                  </SignedIn>
+                  <SignedOut>
+                    <Navigate to="/login" replace />
+                  </SignedOut>
+                </>
+              } 
+            />
+            
+            {/* Profil sayfası - sadece giriş yapmış kullanıcılar */}
+            <Route 
+              path="/profile" 
+              element={
+                <>
+                  <SignedIn>
+                    <Profile />
                   </SignedIn>
                   <SignedOut>
                     <Navigate to="/login" replace />
