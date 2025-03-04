@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { User, Users } from "lucide-react";
+import { Users } from "lucide-react";
 
 const CallToAction = () => {
   return (
@@ -12,17 +12,9 @@ const CallToAction = () => {
           Hemen Başlayın
         </h2>
         <p className="text-lg text-masqot-secondary mb-8 max-w-2xl mx-auto">
-          E-kitaplarımıza erişmek için hesap oluşturun ve yapay zeka dünyasını keşfetmeye başlayın.
+          E-kitaplarımıza erişmek ve yapay zeka dünyasını keşfetmeye başlamak için WhatsApp grubumuza katılın.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link to="/login">
-            <Button
-              className="bg-masqot-primary hover:bg-masqot-secondary text-white px-6 py-2 text-sm rounded-md transition-all duration-300 w-full sm:w-auto"
-            >
-              <User className="mr-2 h-4 w-4" />
-              Hesap Oluştur
-            </Button>
-          </Link>
+        <div className="flex justify-center">
           <a href="https://chat.whatsapp.com/G4tshtPS1RE64PEecc3QWc" target="_blank" rel="noopener noreferrer">
             <Button
               variant="outline"

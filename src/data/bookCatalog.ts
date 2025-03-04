@@ -8,7 +8,7 @@ export const bookCatalog: BookType[] = [
     title: "Dijital Çağda Başarının Formülü",
     author: "MASQOT Team",
     cover: "/lovable-uploads/75b1a5e3-7464-47c8-81dc-dea727f760f0.png",
-    price: "₺499",
+    price: "₺299",
     category: "AI Tools",
     description: "20 Etkili AI Aracıyla İşinizi Adım Adım İleriye Taşıyın. İş dünyasında yapay zeka araçlarını kullanarak verimliliği artırmanın yollarını öğreten kapsamlı bir rehber.",
     rating: 4.9,

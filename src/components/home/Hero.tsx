@@ -1,9 +1,12 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { CheckCircle, BookOpen, Users, ShoppingCart } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { BookType } from '@/types/book';
+import { useCart } from '@/contexts/CartContext';
+import { toast } from "sonner";
 
 interface HeroProps {
   featuredBook: BookType;
@@ -11,6 +14,15 @@ interface HeroProps {
 }
 
 const Hero = ({ featuredBook, onAddToCart }: HeroProps) => {
+  const { addItem } = useCart();
+
+  const handleAddToCart = () => {
+    // Add book directly to cart
+    addItem(featuredBook);
+    // Also call the original callback for compatibility
+    onAddToCart(featuredBook.id, featuredBook.title);
+  };
+
   return (
     <section className="container mx-auto px-4 py-12 md:py-20">
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
@@ -91,7 +103,7 @@ const Hero = ({ featuredBook, onAddToCart }: HeroProps) => {
                   </span>
                   <Button
                     className="bg-masqot-primary hover:bg-masqot-secondary text-white text-sm rounded-md transition-all duration-300"
-                    onClick={() => onAddToCart(featuredBook.id, featuredBook.title)}
+                    onClick={handleAddToCart}
                   >
                     <ShoppingCart className="mr-2 h-4 w-4" />
                     Sepete Ekle
