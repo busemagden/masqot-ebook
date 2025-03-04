@@ -9,6 +9,9 @@ export interface BookType {
   description: string;
   rating?: number;
   reviewCount?: number;
-  previewImages?: string[];
   comingSoon?: boolean;
+  previewImages?: string[];
+  publishDate?: string;
+  pageCount?: number;
+  readerCount?: number;
 }

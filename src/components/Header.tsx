@@ -6,7 +6,7 @@ import { useAuth } from '@clerk/clerk-react';
 import CartDrawer from "@/components/cart/CartDrawer";
 
 const Header = () => {
-  const { isSignedIn, userId } = useAuth();
+  const { isSignedIn } = useAuth();
 
   return (
     <header className="flex items-center justify-between p-4 bg-white shadow">

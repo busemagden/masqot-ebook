@@ -1,8 +1,8 @@
 
 import React from 'react';
+import { ArrowLeft, Calendar, Book, Users } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { BookType } from '@/types/book';
-import { Button } from '@/components/ui/button';
-import { X } from 'lucide-react';
 import BookRating from './BookRating';
 import BookPurchaseButton from './BookPurchaseButton';
 
@@ -14,76 +14,106 @@ interface BookDetailsProps {
 
 const BookDetails = ({ book, onClose, onAddToCart }: BookDetailsProps) => {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="absolute right-2 top-2 z-10"
-          onClick={onClose}
-        >
-          <X className="h-5 w-5" />
-        </Button>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-          <div>
-            <img 
-              src={book.cover} 
-              alt={book.title} 
-              className="w-full h-auto object-cover rounded-md shadow-md"
-            />
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 50 }}
+      transition={{ duration: 0.3 }}
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.9 }}
+        animate={{ scale: 1 }}
+        className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="sticky top-0 bg-white z-10 p-4 border-b flex items-center">
+          <button
+            onClick={onClose}
+            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+          >
+            <ArrowLeft size={20} />
+          </button>
+          <h2 className="text-xl font-bold ml-2">Kitap Detayları</h2>
+        </div>
+
+        <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="col-span-1">
+            <div className="sticky top-20">
+              <img
+                src={book.cover}
+                alt={book.title}
+                className="w-full h-auto rounded-lg shadow-md"
+              />
+              
+              <div className="mt-4">
+                {book.rating && (
+                  <BookRating rating={book.rating} reviewCount={book.reviewCount || 0} />
+                )}
+              </div>
+              
+              <div className="mt-6">
+                <BookPurchaseButton
+                  isComingSoon={book.comingSoon || false}
+                  onAddToCart={() => onAddToCart(book.id, book.title)}
+                  price={book.price}
+                  bookTitle={book.title}
+                  bookId={book.id}
+                />
+              </div>
+            </div>
           </div>
           
-          <div className="flex flex-col">
-            <h2 className="text-2xl font-bold mb-2">{book.title}</h2>
-            <p className="text-gray-600 mb-4">{book.author}</p>
+          <div className="col-span-1 md:col-span-2 space-y-6">
+            <div>
+              <h1 className="text-2xl font-bold">{book.title}</h1>
+              <p className="text-gray-600">{book.author}</p>
+            </div>
             
-            {book.rating && (
-              <div className="mb-4">
-                <BookRating rating={book.rating} reviewCount={book.reviewCount} />
+            <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+              <div className="flex items-center">
+                <Calendar size={16} className="mr-1" />
+                <span>Yayın: {book.publishDate || 'Belirtilmemiş'}</span>
               </div>
-            )}
-            
-            <div className="mb-6">
-              <BookPurchaseButton 
-                isComingSoon={book.comingSoon || false} 
-                onAddToCart={() => onAddToCart(book.id, book.title)}
-                price={book.price}
-                bookTitle={book.title}
-                bookId={book.id}
-              />
+              
+              <div className="flex items-center">
+                <Book size={16} className="mr-1" />
+                <span>Sayfa: {book.pageCount || 'Belirtilmemiş'}</span>
+              </div>
+              
+              <div className="flex items-center">
+                <Users size={16} className="mr-1" />
+                <span>Okuyucu: {book.readerCount || '0'}</span>
+              </div>
             </div>
             
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold mb-2">Açıklama</h3>
-              <p className="text-gray-700">{book.description}</p>
+            <div>
+              <h3 className="font-semibold text-lg mb-2">Açıklama</h3>
+              <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                {book.description}
+              </p>
             </div>
             
-            {book.topics && book.topics.length > 0 && (
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold mb-2">Konular</h3>
-                <div className="flex flex-wrap gap-2">
-                  {book.topics.map((topic, index) => (
-                    <span 
-                      key={index} 
-                      className="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded"
-                    >
-                      {topic}
-                    </span>
+            {book.previewImages && book.previewImages.length > 0 && (
+              <div>
+                <h3 className="font-semibold text-lg mb-3">Kitaptan Görüntüler</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {book.previewImages.map((image, index) => (
+                    <img
+                      key={index}
+                      src={image}
+                      alt={`${book.title} Preview ${index + 1}`}
+                      className="w-full h-40 object-cover rounded-md shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                    />
                   ))}
                 </div>
               </div>
             )}
-            
-            {book.pages && (
-              <div className="text-sm text-gray-500">
-                Sayfa Sayısı: {book.pages}
-              </div>
-            )}
           </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
